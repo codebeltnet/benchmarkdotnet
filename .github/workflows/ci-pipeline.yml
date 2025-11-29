@@ -1,0 +1,93 @@
+name: ClassLibrary1 CI Pipeline
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      configuration:
+        type: choice
+        description: The build configuration to use in the deploy stage.
+        required: true
+        default: Release
+        options:
+          - Debug
+          - Release
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: call-build
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+    uses: codebeltnet/jobs-dotnet-build/.github/workflows/default.yml@v3
+    with:
+      configuration: ${{ matrix.configuration }}
+      strong-name-key-filename: classlibrary1.snk
+    secrets: inherit
+
+  pack:
+    name: call-pack
+    needs: [build]
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+    uses: codebeltnet/jobs-dotnet-pack/.github/workflows/default.yml@v3
+    with:
+      configuration: ${{ matrix.configuration }}
+      version: ${{ needs.build.outputs.version }}
+
+  test:
+    name: call-test
+    needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, ubuntu-24-04-arm, windows-11-arm]
+        configuration: [Debug, Release]
+    uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
+    with:
+      configuration: ${{ matrix.configuration }}
+      runs-on: ${{ matrix.os }}
+      build-switches: -p:SkipSignAssembly=true
+
+  sonarcloud:
+    name: call-sonarcloud
+    needs: [build, test]
+    uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v3
+    with:
+      organization: yourorg
+      projectKey: classlibrary1
+      version: ${{ needs.build.outputs.version }}
+    secrets: inherit
+
+  codecov:
+    name: call-codecov
+    needs: [build, test]
+    uses: codebeltnet/jobs-codecov/.github/workflows/default.yml@v1
+    with:
+      repository: yourorg/classlibrary1
+    secrets: inherit
+          
+  codeql:
+    name: call-codeql
+    needs: [build, test]
+    uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v3
+    permissions:
+      security-events: write
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    name: call-nuget
+    needs: [build, pack, test, sonarcloud, codecov, codeql]
+    uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v2
+    with:
+      version: ${{ needs.build.outputs.version }}
+      environment: Production
+      configuration: ${{ inputs.configuration == '' && 'Release' || inputs.configuration }}
+    permissions:
+      contents: write
+      packages: write
+    secrets: inherit
