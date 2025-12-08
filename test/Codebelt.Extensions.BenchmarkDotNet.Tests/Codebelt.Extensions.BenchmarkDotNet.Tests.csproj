@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Codebelt.Extensions.BenchmarkDotNet</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\tuning\**\*.csproj" ReferenceOutputAssembly="false">
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Codebelt.Extensions.BenchmarkDotNet\Codebelt.Extensions.BenchmarkDotNet.csproj" />
+  </ItemGroup>
+
+</Project>
