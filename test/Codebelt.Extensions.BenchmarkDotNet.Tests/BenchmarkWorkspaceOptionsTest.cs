@@ -484,4 +484,166 @@ public class BenchmarkWorkspaceOptionsTest : Test
         // Assert
         Assert.False(options.AllowDebugBuild);
     }
+
+    [Fact]
+    public void Slim_ShouldBeConfiguredJob()
+    {
+        // Act
+        var slimJob = BenchmarkWorkspaceOptions.Slim;
+
+        // Assert
+        Assert.NotNull(slimJob);
+        Assert.Equal(1, slimJob.Run.WarmupCount);
+        Assert.Equal(15, slimJob.Run.MinIterationCount);
+        Assert.Equal(20, slimJob.Run.MaxIterationCount);
+        Assert.Equal(250, slimJob.Run.IterationTime.ToMilliseconds());
+
+        TestOutput.WriteLine($"Slim Job - WarmupCount: {slimJob.Run.WarmupCount}");
+        TestOutput.WriteLine($"Slim Job - MinIterationCount: {slimJob.Run.MinIterationCount}");
+        TestOutput.WriteLine($"Slim Job - MaxIterationCount: {slimJob.Run.MaxIterationCount}");
+        TestOutput.WriteLine($"Slim Job - IterationTime: {slimJob.Run.IterationTime.ToMilliseconds()}ms");
+    }
+
+    [Fact]
+    public void PostConfigureOptions_ShouldNotOverwriteExistingArtifactsPath()
+    {
+        // Arrange
+        var existingPath = @"C:\ExistingArtifacts";
+        var options = new BenchmarkWorkspaceOptions();
+        
+        if (options.Configuration is ManualConfig manual)
+        {
+            manual.ArtifactsPath = existingPath;
+        }
+        else
+        {
+            options.Configuration = options.Configuration.WithArtifactsPath(existingPath);
+        }
+
+        // Act
+        options.PostConfigureOptions();
+
+        // Assert
+        Assert.Equal(existingPath, options.Configuration.ArtifactsPath);
+    }
+
+    [Fact]
+    public void PostConfigureOptions_ShouldWorkWithNonManualConfig()
+    {
+        // Arrange
+        var options = new BenchmarkWorkspaceOptions();
+        var testRepoPath = @"C:\TestRepo";
+        var testReportsFolder = "reports";
+        
+        // Create a non-ManualConfig by using WithArtifactsPath on DefaultConfig
+        options.Configuration = ManualConfig.CreateEmpty().WithArtifactsPath("");
+        options.RepositoryPath = testRepoPath;
+        options.RepositoryReportsFolder = testReportsFolder;
+
+        // Act
+        options.PostConfigureOptions();
+
+        // Assert
+        var expectedPath = Path.Combine(testRepoPath, testReportsFolder);
+        Assert.Equal(expectedPath, options.Configuration.ArtifactsPath);
+    }
+
+    [Fact]
+    public void Configuration_ShouldHaveStatisticColumns()
+    {
+        // Arrange & Act
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Assert
+        var config = options.Configuration as ManualConfig;
+        Assert.NotNull(config);
+
+        // Check that column providers were added via the config
+        var columnProviders = options.Configuration.GetColumnProviders().ToList();
+        Assert.NotEmpty(columnProviders);
+
+        // Verify StatisticsColumnProvider is present (which would include our Median, Min, Max columns)
+        Assert.Contains(columnProviders, provider => provider.GetType().Name == "StatisticsColumnProvider");
+
+        // The configuration includes DefaultColumnProviders.Instance which adds standard providers
+        var providerNames = columnProviders.Select(p => p.GetType().Name).ToList();
+        TestOutput.WriteLine($"Column Providers: {string.Join(", ", providerNames)}");
+    }
+
+    [Fact]
+    public void Configuration_ShouldHaveCustomSummaryStyle()
+    {
+        // Arrange & Act
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Assert
+        Assert.NotNull(options.Configuration.SummaryStyle);
+        Assert.Equal(36, options.Configuration.SummaryStyle.MaxParameterColumnWidth);
+
+        TestOutput.WriteLine($"MaxParameterColumnWidth: {options.Configuration.SummaryStyle.MaxParameterColumnWidth}");
+    }
+
+    [Fact]
+    public void Configuration_ShouldHaveDanishCultureInfo()
+    {
+        // Arrange & Act
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Assert
+        Assert.NotNull(options.Configuration.SummaryStyle);
+        Assert.NotNull(options.Configuration.SummaryStyle.CultureInfo);
+        Assert.Equal("da-DK", options.Configuration.SummaryStyle.CultureInfo.Name);
+
+        TestOutput.WriteLine($"CultureInfo: {options.Configuration.SummaryStyle.CultureInfo.Name}");
+    }
+
+    [Fact]
+    public void Configuration_ShouldHaveDisabledLogFile()
+    {
+        // Arrange & Act
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Assert
+        Assert.True((options.Configuration.Options & ConfigOptions.DisableLogFile) == ConfigOptions.DisableLogFile);
+    }
+
+    [Fact]
+    public void Configuration_ShouldHaveBuildTimeout()
+    {
+        // Arrange & Act
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Assert
+        Assert.Equal(TimeSpan.FromMinutes(15), options.Configuration.BuildTimeout);
+
+        TestOutput.WriteLine($"BuildTimeout: {options.Configuration.BuildTimeout}");
+    }
+
+    [Fact]
+    public void Configuration_ShouldHaveDefaultValidatorsAndAnalysers()
+    {
+        // Arrange & Act
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Assert
+        Assert.NotEmpty(options.Configuration.GetValidators());
+        Assert.NotEmpty(options.Configuration.GetAnalysers());
+
+        TestOutput.WriteLine($"Validators: {options.Configuration.GetValidators().Count()}");
+        TestOutput.WriteLine($"Analysers: {options.Configuration.GetAnalysers().Count()}");
+    }
+
+    [Fact]
+    public void Configuration_ShouldHaveSlimJobAsDefault()
+    {
+        // Arrange & Act
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Assert
+        var jobs = options.Configuration.GetJobs().ToList();
+        Assert.Single(jobs);
+        Assert.True(jobs[0].Meta.IsDefault);
+
+        TestOutput.WriteLine($"Default Job - WarmupCount: {jobs[0].Run.WarmupCount}");
+    }
 }
