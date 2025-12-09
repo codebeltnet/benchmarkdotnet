@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>Codebelt.Extensions.BenchmarkDotNet.Console</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+    <ProjectReference Include="..\..\src\Codebelt.Extensions.BenchmarkDotNet.Console\Codebelt.Extensions.BenchmarkDotNet.Console.csproj" />
+  </ItemGroup>
+
+</Project>

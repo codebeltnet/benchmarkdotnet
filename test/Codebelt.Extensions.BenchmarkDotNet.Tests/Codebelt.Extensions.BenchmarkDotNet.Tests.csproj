@@ -5,12 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\tuning\**\*.csproj" ReferenceOutputAssembly="false">
-      <Private>false</Private>
-    </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Codebelt.Extensions.BenchmarkDotNet\Codebelt.Extensions.BenchmarkDotNet.csproj" />
   </ItemGroup>
 
