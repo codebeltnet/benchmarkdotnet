@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace Codebelt.Extensions.BenchmarkDotNet;
 
@@ -17,6 +18,8 @@ public sealed class BenchmarkWorkspace : IBenchmarkWorkspace
 {
     private readonly BenchmarkWorkspaceOptions _options;
     private static bool _assemblyResolverRegistered;
+    private static readonly Lock AssemblyResolverLock = new();
+    private static Dictionary<string, string> _assemblyLookup = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BenchmarkWorkspace"/> class with the specified options.
@@ -79,55 +82,29 @@ public sealed class BenchmarkWorkspace : IBenchmarkWorkspace
     private static IEnumerable<Assembly> LoadAssemblies(string repositoryPath, string targetFrameworkMoniker, string benchmarkProjectSuffix, string repositoryTuningFolder, bool useDebugBuild)
     {
         var tuningDir = Path.Combine(repositoryPath, repositoryTuningFolder);
+        Directory.CreateDirectory(tuningDir);
 
-        if (!Directory.Exists(tuningDir))
-        {
-            Directory.CreateDirectory(tuningDir);
-        }
+        UpdateAssemblyLookup(tuningDir);
+        EnsureAssemblyResolverRegistered();
 
-        if (!_assemblyResolverRegistered)
-        {
-            AppDomain.CurrentDomain.AssemblyResolve += (_, args) =>
-            {
-                try
-                {
-                    var requestedName = new AssemblyName(args.Name).Name;
-                    if (string.IsNullOrEmpty(requestedName)) { return null; }
-                    var fileName = requestedName + ".dll";
-
-                    var match = Directory.EnumerateFiles(tuningDir, fileName, SearchOption.AllDirectories).FirstOrDefault();
-                    if (match != null)
-                    {
-                        var asmName = AssemblyName.GetAssemblyName(match);
-                        var already = AppDomain.CurrentDomain.GetAssemblies()
-                            .FirstOrDefault(a => AssemblyName.ReferenceMatchesDefinition(a.GetName(), asmName));
-                        if (already != null) { return already; }
-                        return Assembly.LoadFrom(match);
-                    }
-                }
-                catch
-                {
-                    // swallow and allow default resolution to continue
-                }
-                return null;
-            };
-            _assemblyResolverRegistered = true;
-        }
+        var debugOrRelease = useDebugBuild ? "Debug" : "Release";
+        var buildSegment = Path.Combine("bin", debugOrRelease, targetFrameworkMoniker);
 
         var alreadyLoaded = AppDomain.CurrentDomain.GetAssemblies();
-
         var assemblies = new List<Assembly>();
-        var filteredAssemblies = Directory.EnumerateFiles(tuningDir, $"*.{benchmarkProjectSuffix}.dll", SearchOption.AllDirectories);
-        var debugOrRelease = useDebugBuild
-            ? "Debug"
-            : "Release";
 
-        foreach (var path in filteredAssemblies.Where(path => path.Contains($"bin{Path.DirectorySeparatorChar}{debugOrRelease}{Path.DirectorySeparatorChar}{targetFrameworkMoniker}", StringComparison.OrdinalIgnoreCase)))
+        var candidatePaths = Directory
+            .EnumerateFiles(tuningDir, $"*.{benchmarkProjectSuffix}.dll", SearchOption.AllDirectories)
+            .Where(path => path.IndexOf(buildSegment, StringComparison.OrdinalIgnoreCase) >= 0);
+
+        foreach (var path in candidatePaths)
         {
             try
             {
                 var candidateName = AssemblyName.GetAssemblyName(path);
-                var existing = alreadyLoaded.FirstOrDefault(a => AssemblyName.ReferenceMatchesDefinition(a.GetName(), candidateName));
+                var existing = alreadyLoaded.FirstOrDefault(a =>
+                    AssemblyName.ReferenceMatchesDefinition(a.GetName(), candidateName));
+
                 if (existing != null)
                 {
                     assemblies.Add(existing);
@@ -143,7 +120,7 @@ public sealed class BenchmarkWorkspace : IBenchmarkWorkspace
             }
             catch
             {
-                // intentionally swallow to allow other assemblies to load
+                // swallow and continue
             }
         }
 
@@ -153,6 +130,56 @@ public sealed class BenchmarkWorkspace : IBenchmarkWorkspace
         }
 
         return assemblies;
+    }
+
+    private static void UpdateAssemblyLookup(string tuningDir)
+    {
+        var allDlls = Directory.EnumerateFiles(tuningDir, "*.dll", SearchOption.AllDirectories);
+        var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var path in allDlls)
+        {
+            var simpleName = Path.GetFileNameWithoutExtension(path);
+            if (string.IsNullOrEmpty(simpleName))
+            {
+                continue;
+            }
+            map[simpleName] = path;
+        }
+        _assemblyLookup = map;
+    }
+
+    private static void EnsureAssemblyResolverRegistered()
+    {
+        lock (AssemblyResolverLock)
+        {
+            if (_assemblyResolverRegistered) { return; }
+
+            AppDomain.CurrentDomain.AssemblyResolve += (_, args) =>
+            {
+                try
+                {
+                    var requestedName = new AssemblyName(args.Name).Name;
+                    if (string.IsNullOrEmpty(requestedName)) { return null; }
+
+                    if (!_assemblyLookup.TryGetValue(requestedName, out var path) || !File.Exists(path))
+                    {
+                        return null;
+                    }
+
+                    var asmName = AssemblyName.GetAssemblyName(path);
+                    var already = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => AssemblyName.ReferenceMatchesDefinition(a.GetName(), asmName));
+                    if (already != null) { return already; }
+
+                    return Assembly.LoadFrom(path);
+                }
+                catch
+                {
+                    return null;
+                }
+            };
+
+            _assemblyResolverRegistered = true;
+        }
     }
 
     private static void CleanupResults(string reportsResultsPath, string reportsTuningPath)
