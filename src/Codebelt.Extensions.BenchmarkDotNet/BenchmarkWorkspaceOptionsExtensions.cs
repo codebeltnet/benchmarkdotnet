@@ -55,6 +55,13 @@ namespace Codebelt.Extensions.BenchmarkDotNet
         /// This preserves BenchmarkDotNet's design while providing an intuitive experience for users configuring <see cref="BenchmarkWorkspaceOptions"/> via delegates.
         /// </para>
         /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="options"/> cannot be null -or-
+        /// <paramref name="configure"/> cannot be null.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// <paramref name="configure"/> must not return null.
+        /// </exception>
         public static BenchmarkWorkspaceOptions ConfigureBenchmarkDotNet(this BenchmarkWorkspaceOptions options, Func<IConfig, IConfig> configure)
         {
             Validator.ThrowIfNull(options);
