@@ -16,17 +16,17 @@ Copilot must follow these guidelines when generating benchmark fixtures.
 
 - All benchmark projects live under the `tuning/` folder.  
   Examples:
-  - `tuning/Codebelt.Extensions.BenchmarkDotNet.Core.Benchmarks/`
-  - `tuning/Codebelt.Extensions.BenchmarkDotNet.Security.Benchmarks/`
+  - `tuning/Codebelt.Extensions.BenchmarkDotNet.Benchmarks/`
+  - `tuning/Codebelt.Extensions.BenchmarkDotNet.Console.Benchmarks/`
 
 - **Namespaces must NOT end with `.Benchmarks`.**  
   They must mirror the production assembly’s namespace.
 
   Example:  
-  If benchmarking a type inside `Codebelt.Extensions.BenchmarkDotNet.Security.Cryptography`, then:
+  If benchmarking a type inside `Codebelt.Extensions.BenchmarkDotNet.Console`, then:
 
   ```csharp
-  namespace Codebelt.Extensions.BenchmarkDotNet.Security.Cryptography
+  namespace Codebelt.Extensions.BenchmarkDotNet.Console
   {
       public class Sha512256Benchmark { … }
   }
@@ -36,12 +36,12 @@ Copilot must follow these guidelines when generating benchmark fixtures.
   Example: `DateSpanBenchmark`, `FowlerNollVoBenchmark`.
 
 * Benchmark files should be located in the matching benchmark project
-  (e.g., benchmarks for `Codebelt.Extensions.BenchmarkDotNet.Security.Cryptography` go in `Codebelt.Extensions.BenchmarkDotNet.Security.Cryptography.Benchmarks.csproj`).
+  (e.g., benchmarks for `Codebelt.Extensions.BenchmarkDotNet.Console` go in `Codebelt.Extensions.BenchmarkDotNet.Console.Benchmarks.csproj`).
 
 * In the `.csproj` for each benchmark project, set the root namespace to the production namespace:
 
   ```xml
-  <RootNamespace>Codebelt.Extensions.BenchmarkDotNet.Security.Cryptography</RootNamespace>
+  <RootNamespace>Codebelt.Extensions.BenchmarkDotNet.Console</RootNamespace>
   ```
 
 ---
@@ -162,4 +162,3 @@ namespace Codebelt.Extensions.BenchmarkDotNet
 * Use `[Benchmark]` only for pure performance measurement.
 * Avoid `MethodImplOptions.NoInlining` unless absolutely necessary.
 * Use small sets of meaningful benchmark scenarios — avoid combinatorial explosion.
-
