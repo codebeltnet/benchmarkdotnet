@@ -1,7 +1,11 @@
 ---
 uid: frontpage-md
-title: ClassLibrary1
+title: Extensions for BenchmarkDotNet by Codebelt
 ---
-# ClassLibrary1
+![Extensions for BenchmarkDotNet API by Codebelt](/images/128x128.png)
 
-Landing page for ClassLibrary1.
+# Extensions for BenchmarkDotNet by Codebelt
+
+This project is part of [Extensions for BenchmarkDotNet by Codebelt](https://github.com/codebeltnet/benchmarkdotnet).
+
+Proceed to the [docs](/api/Codebelt.Extensions.BenchmarkDotNet.html) to learn more about the capabilities of this project.

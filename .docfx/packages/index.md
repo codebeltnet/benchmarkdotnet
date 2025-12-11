@@ -1,19 +1,12 @@
 # NuGet Packages
 
-This is a list of all NuGet packages from **ClassLibrary1** that is publicly available on [NuGet.org](https://www.nuget.org/packages?q=ClassLibrary1); the packages here are listed alphabetically and are available in preview-, rc- and production-ready versions.
+This is a list of all NuGet packages from **Extensions for BenchmarkDotNet by Codebelt** that is publicly available on [NuGet.org](https://www.nuget.org/packages?q=codebelt.extensions.benchmarkdotnet); the packages here are listed alphabetically and are available in preview-, rc- and production-ready versions.
 
 ## 📦 Standalone Packages
 
-Provides a focused API for ...
+Provides a focused API for BenchmarkDotNet projects.
 
 |Package|vNext|Stable|Downloads|
 |:--|:-:|:-:|:-:|
-| [ClassLibrary1](https://www.nuget.org/packages/ClassLibrary1/) | ![vNext](https://img.shields.io/nuget/vpre/ClassLibrary1?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/ClassLibrary1?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/ClassLibrary1?color=blueviolet&logo=nuget) |
-
-## 🏭 Productivity Packages
-
-Provides a convenient set of default API additions for ...
-
-|Package|vNext|Stable|Downloads|
-|:--|:-:|:-:|:-:|
-| [ClassLibrary1.App](https://www.nuget.org/packages/ClassLibrary1.App/) | ![vNext](https://img.shields.io/nuget/vpre/ClassLibrary1.App?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/ClassLibrary1.App?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/ClassLibrary1.App?color=blueviolet&logo=nuget) |
+| [Codebelt.Extensions.BenchmarkDotNet](https://www.nuget.org/packages/Codebelt.Extensions.BenchmarkDotNet/) | ![vNext](https://img.shields.io/nuget/vpre/Codebelt.Extensions.BenchmarkDotNet?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Codebelt.Extensions.BenchmarkDotNet?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Codebelt.Extensions.BenchmarkDotNet?color=blueviolet&logo=nuget) |
+| [Codebelt.Extensions.BenchmarkDotNet.Console](https://www.nuget.org/packages/Codebelt.Extensions.BenchmarkDotNet.Console/) | ![vNext](https://img.shields.io/nuget/vpre/Codebelt.Extensions.BenchmarkDotNet.Console?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Codebelt.Extensions.BenchmarkDotNet.Console?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Codebelt.Extensions.BenchmarkDotNet.Console?color=blueviolet&logo=nuget) |
