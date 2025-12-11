@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Codebelt.Extensions.BenchmarkDotNet.Console/Codebelt.Extensions.BenchmarkDotNet.Console.csproj" />
+    <Project Path="src/Codebelt.Extensions.BenchmarkDotNet/Codebelt.Extensions.BenchmarkDotNet.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Codebelt.Extensions.BenchmarkDotNet.Console.Tests/Codebelt.Extensions.BenchmarkDotNet.Console.Tests.csproj" />
+    <Project Path="test/Codebelt.Extensions.BenchmarkDotNet.Tests/Codebelt.Extensions.BenchmarkDotNet.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tooling/">
+    <Project Path="tooling/Codebelt.Extensions.BenchmarkDotNet.Runner/Codebelt.Extensions.BenchmarkDotNet.Runner.csproj" />
+  </Folder>
+  <Folder Name="/tuning/">
+    <Project Path="tuning/Codebelt.Extensions.BenchmarkDotNet.Benchmarks/Codebelt.Extensions.BenchmarkDotNet.Benchmarks.csproj" />
+    <Project Path="tuning/Codebelt.Extensions.BenchmarkDotNet.Console.Benchmarks/Codebelt.Extensions.BenchmarkDotNet.Console.Benchmarks.csproj" />
+  </Folder>
+</Solution>
