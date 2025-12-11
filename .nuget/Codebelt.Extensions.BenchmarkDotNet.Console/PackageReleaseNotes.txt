@@ -1,0 +1,8 @@
+Version: 1.0.0
+Availability: .NET 10 and .NET 9
+
+# New Features
+- ADDED BenchmarkContext class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that represents the command-line context for a benchmark run
+- ADDED BenchmarkProgram class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that provides the main entry point for hosting and running benchmarks using BenchmarkDotNet
+- ADDED BenchmarkWorker class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that is responsible for executing benchmarks within the console host
+ 

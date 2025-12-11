@@ -1,0 +1,10 @@
+Version: 1.0.0
+Availability: .NET 10 and .NET 9
+
+# New Features
+- ADDED BenchmarkWorkspace class in the Codebelt.Extensions.BenchmarkDotNet namespace that provides a default implementation of IBenchmarkWorkspace for discovering and handling assemblies and their generated artifacts in BenchmarkDotNet
+- ADDED BenchmarkWorkspaceOptions class in the Codebelt.Extensions.BenchmarkDotNet namespace that specifies configuration options that is related to the BenchmarkWorkspace class
+- ADDED BenchmarkWorkspaceOptionsExtensions class in the Codebelt.Extensions.BenchmarkDotNet namespace that consist of extension methods for the BenchmarkWorkspaceOptions class: ConfigureBenchmarkDotNet
+- ADDED IBenchmarkWorkspace interface in the Codebelt.Extensions.BenchmarkDotNet namespace that defines a way for discovering and handling assemblies and their generated artifacts in BenchmarkDotNet
+- ADDED ServiceCollectionExtensions class in the Codebelt.Extensions.BenchmarkDotNet namespace that consist of extension methods for the IServiceCollection interface: AddBenchmarkWorkspace and AddBenchmarkWorkspace{TWorkspace}
+ 
