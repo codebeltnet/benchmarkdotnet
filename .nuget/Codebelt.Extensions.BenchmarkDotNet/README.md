@@ -12,6 +12,45 @@ It removes unnecessary ceremony while embracing best practices from other consum
 
 At its heart, the package is **free, flexible, and crafted to extend and empower your agile codebelt**.
 
+## Folder Structure
+
+The folder structure promoted by **Codebelt.Extensions.BenchmarkDotNet** follows the same architectural principles commonly used for test projects—while remaining purpose-built for benchmarking.
+
+At the solution level, benchmarks are treated as a first-class concern, clearly separated from tooling and output artifacts.
+
+- **tuning** contains all benchmark projects (e.g. `*.Benchmarks`), in the same way that a `test` folder typically contains `*.Tests` projects,
+- **tooling** hosts the executable console application responsible for discovering and running benchmarks,
+- **reports** captures benchmark results and generated artifacts, separated from source code and tooling concerns.
+
+This separation enforces a clean boundary between benchmark definition, execution, and output, making benchmark suites easier to scale, automate, and reason about.
+
+### Example Layout
+
+```text
+Repository Root
+│
+├─ reports
+│  └─ tuning
+│     └─ github
+│        └─ MyLibrary.ExampleBenchmarks-report-github.md
+│
+├─ src
+│  └─ MyLibrary
+│
+├─ test
+│  └─ MyLibrary.Tests
+│     └─ ExampleTest.cs
+│
+├─ tooling
+│  └─ benchmark-runner
+│     └─ Program.cs
+│
+└─ tuning
+   └─ MyLibrary.Benchmarks
+      └─ ExampleBenchmark.cs
+```
+
+
 ## CSharp Example
 
 Benchmarks are executed using a Generic Host–based bootstrap model, allowing BenchmarkDotNet to participate in a fully managed application lifecycle with dependency injection, configuration, and logging.
@@ -30,6 +69,8 @@ hostBuilder.ConfigureServices(services =>
 var host = hostBuilder.Build();
 host.Run();
 ```
+
+The folder structure is based o
 
 ## Related Packages
 
