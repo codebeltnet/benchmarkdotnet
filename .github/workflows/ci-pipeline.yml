@@ -61,7 +61,7 @@ jobs:
     uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v3
     with:
       organization: geekle
-      projectKey: bemchmarkdotnet
+      projectKey: benchmarkdotnet
       version: ${{ needs.build.outputs.version }}
     secrets: inherit
 
@@ -70,7 +70,7 @@ jobs:
     needs: [build, test]
     uses: codebeltnet/jobs-codecov/.github/workflows/default.yml@v1
     with:
-      repository: codebeltnet/bemchmarkdotnet
+      repository: codebeltnet/benchmarkdotnet
     secrets: inherit
           
   codeql:
