@@ -16,7 +16,7 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
     {
         static BenchmarkProgram()
         {
-            var isDebugBuild = Decorator.Enclose(Assembly.GetEntryAssembly()).IsDebugBuild();
+            var isDebugBuild = Decorator.Enclose(Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly()).IsDebugBuild();
             BuildConfiguration = isDebugBuild ? "Debug" : "Release";
             IsDebugBuild = isDebugBuild;
         }
