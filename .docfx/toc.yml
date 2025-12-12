@@ -1,4 +1,4 @@
-- name: ClassLibrary1 API
-  href: api/ClassLibrary1.html
+- name: Bootstrapper API
+  href: api/Codebelt.Extensions.BenchmarkDotNet.html
 - name: NuGet
   href: packages

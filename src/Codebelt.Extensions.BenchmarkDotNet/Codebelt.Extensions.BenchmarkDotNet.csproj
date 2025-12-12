@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>The Codebelt.Extensions.BenchmarkDotNet namespace contains types that provide a uniform, opinionated, and extensible way of working with BenchmarkDotNet.</Description>
+    <PackageTags>benchmark benchmarkdotnet performance microbenchmark profiling diagnostics</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="Cuemon.Core" />
+  </ItemGroup>
+
+</Project>

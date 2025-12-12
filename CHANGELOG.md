@@ -4,6 +4,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [Unreleased] - TBD
+## [1.0.0] - 2025-12-12
+
+This is the initial stable release of the `Codebelt.Extensions.BenchmarkDotNet` and `Codebelt.Extensions.BenchmarkDotNet.Console` packages.
 
 ### Added
+
+- ADDED `BenchmarkWorkspace` class in the Codebelt.Extensions.BenchmarkDotNet namespace that provides a default implementation of `IBenchmarkWorkspace` for discovering and handling assemblies and their generated artifacts in BenchmarkDotNet,
+- ADDED `BenchmarkWorkspaceOptions` class in the Codebelt.Extensions.BenchmarkDotNet namespace that specifies configuration options that is related to the `BenchmarkWorkspace` class,
+- ADDED `BenchmarkWorkspaceOptionsExtensions` class in the Codebelt.Extensions.BenchmarkDotNet namespace that consist of extension methods for the `BenchmarkWorkspaceOptions` class: `ConfigureBenchmarkDotNet`,
+- ADDED `IBenchmarkWorkspace` interface in the Codebelt.Extensions.BenchmarkDotNet namespace that defines a way for discovering and handling assemblies and their generated artifacts in BenchmarkDotNet,
+- ADDED `ServiceCollectionExtensions` class in the Codebelt.Extensions.BenchmarkDotNet namespace that consist of extension methods for the IServiceCollection interface: `AddBenchmarkWorkspace` and `AddBenchmarkWorkspace{TWorkspace}`,
+- ADDED `BenchmarkContext` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that represents the command-line context for a benchmark run,
+- ADDED `BenchmarkProgram` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that provides the main entry point for hosting and running benchmarks using BenchmarkDotNet,
+- ADDED `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that is responsible for executing benchmarks within the console host.

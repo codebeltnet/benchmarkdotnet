@@ -1,10 +1,10 @@
 ---
-description: 'Writing Unit Tests in ClassLibrary1'
+description: 'Writing Unit Tests in Codebelt.Extensions.BenchmarkDotNet'
 applyTo: "**/*.{cs,csproj}"
 ---
 
-# Writing Unit Tests in ClassLibrary1
-This document provides instructions for writing unit tests in the ClassLibrary1 codebase. Please follow these guidelines to ensure consistency and maintainability.
+# Writing Unit Tests in Codebelt.Extensions.BenchmarkDotNet
+This document provides instructions for writing unit tests in the Codebelt.Extensions.BenchmarkDotNet codebase. Please follow these guidelines to ensure consistency and maintainability.
 
 ## 1. Base Class
 
@@ -48,33 +48,33 @@ namespace Your.Namespace
 ## 5. File and Namespace Organization
 
 - Place test files in the appropriate test project and folder structure.
-- Use namespaces that mirror the source code structure. The namespace of a test file MUST match the namespace of the System Under Test (SUT). Do NOT append ".Tests", ".Benchmarks" or similar suffixes to the namespace. Only the assembly/project name should indicate that the file is a test/benchmark (for example: ClassLibrary1.Foo.Tests assembly, but namespace ClassLibrary1.Foo).
+- Use namespaces that mirror the source code structure. The namespace of a test file MUST match the namespace of the System Under Test (SUT). Do NOT append ".Tests", ".Benchmarks" or similar suffixes to the namespace. Only the assembly/project name should indicate that the file is a test/benchmark (for example: Codebelt.Extensions.BenchmarkDotNet.Foo.Tests assembly, but namespace Codebelt.Extensions.BenchmarkDotNet.Foo).
   - Example: If the SUT class is declared as:
     ```csharp
-    namespace ClassLibrary1.Foo.Bar
+    namespace Codebelt.Extensions.BenchmarkDotNet.Foo.Bar
     {
         public class Zoo { /* ... */ }
     }
     ```
     then the corresponding unit test class must use the exact same namespace:
     ```csharp
-    namespace ClassLibrary1.Foo.Bar
+    namespace Codebelt.Extensions.BenchmarkDotNet.Foo.Bar
     {
         public class ZooTest : Test { /* ... */ }
     }
     ```
   - Do NOT use:
     ```csharp
-    namespace ClassLibrary1.Foo.Bar.Tests { /* ... */ } // ❌
-    namespace ClassLibrary1.Foo.Bar.Benchmarks { /* ... */ } // ❌
+    namespace Codebelt.Extensions.BenchmarkDotNet.Foo.Bar.Tests { /* ... */ } // ❌
+    namespace Codebelt.Extensions.BenchmarkDotNet.Foo.Bar.Benchmarks { /* ... */ } // ❌
     ```
-- The unit tests for the ClassLibrary1.Foo assembly live in the ClassLibrary1.Foo.Tests assembly.
-- The functional tests for the ClassLibrary1.Foo assembly live in the ClassLibrary1.Foo.FunctionalTests assembly.
-- Test class names end with Test and live in the same namespace as the class being tested, e.g., the unit tests for the Boo class that resides in the ClassLibrary1.Foo assembly would be named BooTest and placed in the ClassLibrary1.Foo namespace in the ClassLibrary1.Foo.Tests assembly.
+- The unit tests for the Codebelt.Extensions.BenchmarkDotNet.Foo assembly live in the Codebelt.Extensions.BenchmarkDotNet.Foo.Tests assembly.
+- The functional tests for the Codebelt.Extensions.BenchmarkDotNet.Foo assembly live in the Codebelt.Extensions.BenchmarkDotNet.Foo.FunctionalTests assembly.
+- Test class names end with Test and live in the same namespace as the class being tested, e.g., the unit tests for the Boo class that resides in the Codebelt.Extensions.BenchmarkDotNet.Foo assembly would be named BooTest and placed in the Codebelt.Extensions.BenchmarkDotNet.Foo namespace in the Codebelt.Extensions.BenchmarkDotNet.Foo.Tests assembly.
 - Modify the associated .csproj file to override the root namespace so the compiled namespace matches the SUT. Example:
   ```xml
   <PropertyGroup>
-    <RootNamespace>ClassLibrary1.Foo</RootNamespace>
+    <RootNamespace>Codebelt.Extensions.BenchmarkDotNet.Foo</RootNamespace>
   </PropertyGroup>
   ```
 - When generating test scaffolding automatically, resolve the SUT's namespace from the source file (or project/assembly metadata) and use that exact namespace in the test file header.
@@ -91,7 +91,7 @@ using System.Globalization;
 using Codebelt.Extensions.Xunit;
 using Xunit;
 
-namespace ClassLibrary1
+namespace Codebelt.Extensions.BenchmarkDotNet
 {
     /// <summary>
     /// Tests for the <see cref="DateSpan"/> class.
@@ -150,29 +150,29 @@ namespace ClassLibrary1
 - Never mock IMarshaller; always use a new instance of JsonMarshaller.
 
 ---
-description: 'Writing Performance Tests in ClassLibrary1'
+description: 'Writing Performance Tests in Codebelt.Extensions.BenchmarkDotNet'
 applyTo: "tuning/**, **/*Benchmark*.cs"
 ---
 
-# Writing Performance Tests in ClassLibrary1
-This document provides guidance for writing performance tests (benchmarks) in the ClassLibrary1 codebase using BenchmarkDotNet. Follow these guidelines to keep benchmarks consistent, readable, and comparable.
+# Writing Performance Tests in Codebelt.Extensions.BenchmarkDotNet
+This document provides guidance for writing performance tests (benchmarks) in the Codebelt.Extensions.BenchmarkDotNet codebase using BenchmarkDotNet. Follow these guidelines to keep benchmarks consistent, readable, and comparable.
 
 ## 1. Naming and Placement
 
 - Place micro- and component-benchmarks under the `tuning/` folder or in projects named `*.Benchmarks`.
 - Place benchmark files in the appropriate benchmark project and folder structure.
 - Use namespaces that mirror the source code structure, e.g. do not suffix with `Benchmarks`.
-- Namespace rule: DO NOT append `.Benchmarks` to the namespace. Benchmarks must live in the same namespace as the production assembly. Example: if the production assembly uses `namespace ClassLibrary1.Security.Cryptography`, the benchmark file should also use:
+- Namespace rule: DO NOT append `.Benchmarks` to the namespace. Benchmarks must live in the same namespace as the production assembly. Example: if the production assembly uses `namespace Codebelt.Extensions.BenchmarkDotNet.Security.Cryptography`, the benchmark file should also use:
   ```
-  namespace ClassLibrary1.Security.Cryptography
+  namespace Codebelt.Extensions.BenchmarkDotNet.Security.Cryptography
   {
       public class Sha512256Benchmark { /* ... */ }
   }
   ```
-The class name may end with `Benchmark`, but the namespace must match the assembly (no `.Benchmarks` suffix).
-- The benchmarks for the ClassLibrary1.Bar assembly live in the ClassLibrary1.Bar.Benchmarks assembly.
-- Benchmark class names end with Benchmark and live in the same namespace as the class being measured, e.g., the benchmarks for the Zoo class that resides in the ClassLibrary1.Bar assembly would be named ZooBenchmark and placed in the ClassLibrary1.Bar namespace in the ClassLibrary1.Bar.Benchmarks assembly.
-- Modify the associated .csproj file to override the root namespace, e.g., <RootNamespace>ClassLibrary1.Bar</RootNamespace>.
+The class name must end with `Benchmark`, but the namespace must match the assembly (no `.Benchmarks` suffix).
+- The benchmarks for the Codebelt.Extensions.BenchmarkDotNet.Bar assembly live in the Codebelt.Extensions.BenchmarkDotNet.Bar.Benchmarks assembly.
+- Benchmark class names end with Benchmark and live in the same namespace as the class being measured, e.g., the benchmarks for the Zoo class that resides in the Codebelt.Extensions.BenchmarkDotNet.Bar assembly would be named ZooBenchmark and placed in the Codebelt.Extensions.BenchmarkDotNet.Bar namespace in the Codebelt.Extensions.BenchmarkDotNet.Bar.Benchmarks assembly.
+- Modify the associated .csproj file to override the root namespace, e.g., <RootNamespace>Codebelt.Extensions.BenchmarkDotNet.Bar</RootNamespace>.
 
 ## 2. Attributes and Configuration
 
@@ -203,7 +203,7 @@ The class name may end with `Benchmark`, but the namespace must match the assemb
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 
-namespace ClassLibrary1
+namespace Codebelt.Extensions.BenchmarkDotNet
 {
     [MemoryDiagnoser]
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
@@ -244,11 +244,11 @@ namespace ClassLibrary1
 For further examples, refer to the benchmark files under the `tuning/` folder.
 
 ---
-description: 'Writing XML documentation in ClassLibrary1'
+description: 'Writing XML documentation in Codebelt.Extensions.BenchmarkDotNet'
 applyTo: "**/*.cs"
 ---
 
-# Writing XML documentation in ClassLibrary1
+# Writing XML documentation in Codebelt.Extensions.BenchmarkDotNet
 This document provides instructions for writing XML documentation.
 
 ## 1. Documentation Style
