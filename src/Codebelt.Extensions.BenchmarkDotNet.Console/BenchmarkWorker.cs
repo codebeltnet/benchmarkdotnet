@@ -33,7 +33,7 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
         /// </remarks>
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<ConsoleLifetimeOptions>(o => o.SuppressStatusMessages = true);
+            services.Configure<ConsoleLifetimeOptions>(o => o.SuppressStatusMessages = !BenchmarkProgram.IsDebugBuild);
         }
 
         /// <summary>
