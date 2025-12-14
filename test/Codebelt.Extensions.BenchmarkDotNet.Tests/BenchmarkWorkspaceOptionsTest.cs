@@ -632,4 +632,27 @@ public class BenchmarkWorkspaceOptionsTest : Test
 
         TestOutput.WriteLine($"Default Job - WarmupCount: {jobs[0].Run.WarmupCount}");
     }
+
+    [Fact]
+    public void SkipBenchmarksWithReports_ShouldDefaultToFalse()
+    {
+        // Arrange & Act
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Assert
+        Assert.False(options.SkipBenchmarksWithReports);
+    }
+
+    [Fact]
+    public void SkipBenchmarksWithReports_ShouldBeSettable()
+    {
+        // Arrange
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Act
+        options.SkipBenchmarksWithReports = true;
+
+        // Assert
+        Assert.True(options.SkipBenchmarksWithReports);
+    }
 }

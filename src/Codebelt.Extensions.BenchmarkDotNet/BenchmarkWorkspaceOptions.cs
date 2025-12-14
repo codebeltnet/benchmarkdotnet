@@ -55,6 +55,10 @@ namespace Codebelt.Extensions.BenchmarkDotNet;
 ///         <term><see cref="AllowDebugBuild"/></term>
 ///         <description><c>false</c></description>
 ///     </item>
+///     <item>
+///         <term><see cref="SkipBenchmarksWithReports"/></term>
+///         <description><c>false</c></description>
+///     </item>
 /// </list>
 /// </remarks>
 public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfigurableParameterObject
@@ -146,6 +150,14 @@ public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfi
     /// <c>true</c> to allow Debug builds for benchmarks; otherwise, <c>false</c>. Default is <c>false</c>.
     /// </value>
     public bool AllowDebugBuild { get; set; }
+    
+    /// <summary>
+    /// Gets or sets a value indicating whether benchmarks that already have generated reports should be skipped during execution.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> to skip benchmarks with existing reports; otherwise, <c>false</c>. Default is <c>false</c>.
+    /// </value>
+    public bool SkipBenchmarksWithReports { get; set; }
 
     /// <summary>
     /// Finalizes the configured options before use.
