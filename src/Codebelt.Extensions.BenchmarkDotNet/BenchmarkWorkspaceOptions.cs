@@ -87,7 +87,6 @@ public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfi
 
     private static readonly string DefaultRepositoryPath = GetDefaultRepositoryPath();
     private static readonly string DefaultTargetFrameworkMoniker = ResolveCurrentTfm();
-    private static readonly CultureInfo DanishCulture = CultureInfo.GetCultureInfo("da-DK");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BenchmarkWorkspaceOptions"/> class with sensible defaults.
@@ -221,7 +220,7 @@ public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfi
             .AddJob(Slim.AsDefault()) // tell BDN that this are our default settings
             .AddDiagnoser(MemoryDiagnoser.Default) // MemoryDiagnoser is enabled by default
             .AddColumn(StatisticColumn.Median, StatisticColumn.Min, StatisticColumn.Max)
-            .WithSummaryStyle(SummaryStyle.Default.WithMaxParameterColumnWidth(36).WithCultureInfo(DanishCulture)); // the default is 20 and trims too aggressively some benchmark results
+            .WithSummaryStyle(SummaryStyle.Default.WithMaxParameterColumnWidth(36)); // the default is 20 and trims too aggressively some benchmark results
         config.Options = ConfigOptions.DisableLogFile;
         return config;
     }
