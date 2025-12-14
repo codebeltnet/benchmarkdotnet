@@ -43,7 +43,21 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
         /// </remarks>
         public static void Run(string[] args, Action<BenchmarkWorkspaceOptions> setup = null)
         {
-            Run<BenchmarkWorkspace>(args, setup);
+            Run(args, null, setup);
+        }
+
+        /// <summary>
+        /// Runs benchmarks using the default <see cref="BenchmarkWorkspace"/> implementation.
+        /// </summary>
+        /// <param name="args">The command-line arguments passed to the application.</param>
+        /// <param name="serviceConfigurator">The delegate that will be invoked to configure additional services in the <see cref="IServiceCollection"/>.</param>
+        /// <param name="setup">The <see cref="BenchmarkWorkspaceOptions"/> which may be configured.</param>
+        /// <remarks>
+        /// This method configures the host builder with the necessary services, builds the host, and runs it to execute benchmarks.
+        /// </remarks>
+        public static void Run(string[] args, Action<IServiceCollection> serviceConfigurator = null, Action<BenchmarkWorkspaceOptions> setup = null)
+        {
+            Run<BenchmarkWorkspace>(args, serviceConfigurator, setup);
         }
 
         /// <summary>
@@ -57,11 +71,27 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
         /// </remarks>
         public static void Run<TWorkspace>(string[] args, Action<BenchmarkWorkspaceOptions> setup = null) where TWorkspace : class, IBenchmarkWorkspace
         {
+            Run<TWorkspace>(args, null, setup);
+        }
+
+        /// <summary>
+        /// Runs benchmarks using a custom implementation of <see cref="IBenchmarkWorkspace"/>.
+        /// </summary>
+        /// <typeparam name="TWorkspace">The type of the workspace that implements <see cref="IBenchmarkWorkspace"/>.</typeparam>
+        /// <param name="args">The command-line arguments passed to the application.</param>
+        /// <param name="serviceConfigurator">The delegate that will be invoked to configure additional services in the <see cref="IServiceCollection"/>.</param>
+        /// <param name="setup">The <see cref="BenchmarkWorkspaceOptions"/> which may be configured.</param>
+        /// <remarks>
+        /// This method configures the host builder with the necessary services, builds the host, and runs it to execute benchmarks.
+        /// </remarks>
+        public static void Run<TWorkspace>(string[] args, Action<IServiceCollection> serviceConfigurator = null, Action<BenchmarkWorkspaceOptions> setup = null) where TWorkspace : class, IBenchmarkWorkspace
+        {
             var hostBuilder = CreateHostBuilder(args);
             hostBuilder.ConfigureServices(services =>
             {
                 services.AddSingleton(new BenchmarkContext(args));
                 services.AddBenchmarkWorkspace<TWorkspace>(setup);
+                serviceConfigurator?.Invoke(services);
             });
             var host = hostBuilder.Build();
             host.Run();
