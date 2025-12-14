@@ -214,7 +214,7 @@ public sealed class BenchmarkWorkspace : IBenchmarkWorkspace
 
         Directory.CreateDirectory(reportsTuningPath);
 
-        foreach (var file in Directory.GetFiles(reportsResultsPath))
+        foreach (var file in Directory.GetFiles(reportsResultsPath).Where(f => !Path.GetFileNameWithoutExtension(f).StartsWith("BenchmarkRun", StringComparison.Ordinal)))
         {
             var targetFile = Path.Combine(reportsTuningPath, Path.GetFileName(file));
             File.Move(file, targetFile, true);
