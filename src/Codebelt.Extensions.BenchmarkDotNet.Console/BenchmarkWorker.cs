@@ -4,8 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Filters;
 
 namespace Codebelt.Extensions.BenchmarkDotNet.Console
 {
@@ -33,7 +37,7 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
         /// </remarks>
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<ConsoleLifetimeOptions>(o => o.SuppressStatusMessages = true);
+            services.Configure<ConsoleLifetimeOptions>(o => o.SuppressStatusMessages = !BenchmarkProgram.IsDebugBuild);
         }
 
         /// <summary>
@@ -52,6 +56,34 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
             var workspace = serviceProvider.GetRequiredService<IBenchmarkWorkspace>();
             var assemblies = workspace.LoadBenchmarkAssemblies();
             var context = serviceProvider.GetRequiredService<BenchmarkContext>();
+
+            if (options.SkipBenchmarksWithReports)
+            {
+                var benchmarkTypes = assemblies.SelectMany(a => a.GetTypes().Where(t => t.Name.EndsWith("Benchmark", StringComparison.Ordinal))).ToList();
+                options.ConfigureBenchmarkDotNet(c =>
+                {
+                    var tuningPath = BenchmarkWorkspace.GetReportsTuningPath(options);
+                    if (!Directory.Exists(tuningPath)) { return c; }
+                    var reports = Directory.EnumerateFiles(tuningPath);
+                    foreach (var report in reports)
+                    {
+                        var filename = Path.GetFileNameWithoutExtension(report);
+                        var potentialTypeFullName = filename.Split('-').FirstOrDefault();
+                        if (string.IsNullOrWhiteSpace(potentialTypeFullName)) { continue; }
+
+                        var potentialTypeName = potentialTypeFullName.Split('.').LastOrDefault();
+                        if (string.IsNullOrWhiteSpace(potentialTypeName)) { continue; }
+
+                        var matchingType = benchmarkTypes.FirstOrDefault(t => t.Name.Equals(potentialTypeName, StringComparison.OrdinalIgnoreCase));
+
+                        if (matchingType != null)
+                        {
+                            c = c.AddFilter(new SimpleFilter(bc => bc.Descriptor.Type != matchingType));
+                        }
+                    }
+                    return c;
+                });
+            }
 
             try
             {

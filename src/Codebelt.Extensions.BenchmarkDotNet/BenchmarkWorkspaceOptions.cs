@@ -55,6 +55,10 @@ namespace Codebelt.Extensions.BenchmarkDotNet;
 ///         <term><see cref="AllowDebugBuild"/></term>
 ///         <description><c>false</c></description>
 ///     </item>
+///     <item>
+///         <term><see cref="SkipBenchmarksWithReports"/></term>
+///         <description><c>false</c></description>
+///     </item>
 /// </list>
 /// </remarks>
 public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfigurableParameterObject
@@ -87,7 +91,6 @@ public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfi
 
     private static readonly string DefaultRepositoryPath = GetDefaultRepositoryPath();
     private static readonly string DefaultTargetFrameworkMoniker = ResolveCurrentTfm();
-    private static readonly CultureInfo DanishCulture = CultureInfo.GetCultureInfo("da-DK");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BenchmarkWorkspaceOptions"/> class with sensible defaults.
@@ -147,6 +150,14 @@ public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfi
     /// <c>true</c> to allow Debug builds for benchmarks; otherwise, <c>false</c>. Default is <c>false</c>.
     /// </value>
     public bool AllowDebugBuild { get; set; }
+    
+    /// <summary>
+    /// Gets or sets a value indicating whether benchmarks that already have generated reports should be skipped during execution.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> to skip benchmarks with existing reports; otherwise, <c>false</c>. Default is <c>false</c>.
+    /// </value>
+    public bool SkipBenchmarksWithReports { get; set; }
 
     /// <summary>
     /// Finalizes the configured options before use.
@@ -221,7 +232,7 @@ public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfi
             .AddJob(Slim.AsDefault()) // tell BDN that this are our default settings
             .AddDiagnoser(MemoryDiagnoser.Default) // MemoryDiagnoser is enabled by default
             .AddColumn(StatisticColumn.Median, StatisticColumn.Min, StatisticColumn.Max)
-            .WithSummaryStyle(SummaryStyle.Default.WithMaxParameterColumnWidth(36).WithCultureInfo(DanishCulture)); // the default is 20 and trims too aggressively some benchmark results
+            .WithSummaryStyle(SummaryStyle.Default.WithMaxParameterColumnWidth(36)); // the default is 20 and trims too aggressively some benchmark results
         config.Options = ConfigOptions.DisableLogFile;
         return config;
     }

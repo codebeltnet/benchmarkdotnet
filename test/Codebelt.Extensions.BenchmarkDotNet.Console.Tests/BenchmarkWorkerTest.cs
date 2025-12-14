@@ -161,7 +161,16 @@ public class BenchmarkWorkerTest : Test
 
         // Assert
         Assert.NotNull(options);
-        Assert.True(options.SuppressStatusMessages);
+
+        if (BenchmarkProgram.IsDebugBuild)
+        {
+            Assert.False(options.SuppressStatusMessages);
+        }
+        else
+        {
+            Assert.True(options.SuppressStatusMessages);
+        }
+        
 
         TestOutput.WriteLine($"ConsoleLifetimeOptions.SuppressStatusMessages = {options.SuppressStatusMessages}");
     }

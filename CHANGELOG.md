@@ -4,6 +4,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [1.1.0] - 2025-12-14
+
+### Changed
+
+- `BenchmarkWorkspace` class in the Codebelt.Extensions.BenchmarkDotNet namespace was extended with two new static methods; `GetReportsResultsPath` and `GetReportsTuningPath` for retrieving the paths to the reports results and tuning directories respectively,
+- `BenchmarkWorkspaceOptions` class in the Codebelt.Extensions.BenchmarkDotNet namespace was extended with an additional new property; `SkipBenchmarksWithReports` that indicates whether benchmarks that already have generated reports should be skipped during execution,
+- `BenchmarkProgram` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace was extended to support an optional service configurator delegate for customizing the `IServiceCollection` during host building,
+- `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace was extended to support skipping benchmarks that already have generated reports based on the `BenchmarkWorkspaceOptions.SkipBenchmarksWithReports` property,
+- `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace was changed to conditionally suppress console status messages in services based on whether you are in a debugging session or not.
+
+### Fixed
+
+- `BenchmarkWorkspaceOptions` class in the Codebelt.Extensions.BenchmarkDotNet namespace was fixed so it no longer relies on Danish culture.
+
 ## [1.0.0] - 2025-12-12
 
 This is the initial stable release of the `Codebelt.Extensions.BenchmarkDotNet` and `Codebelt.Extensions.BenchmarkDotNet.Console` packages.

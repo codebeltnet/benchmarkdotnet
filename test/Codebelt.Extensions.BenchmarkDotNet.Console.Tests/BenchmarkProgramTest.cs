@@ -57,6 +57,13 @@ public class BenchmarkProgramTest : Test
             return;
         }
 
+        if (entryAssembly.FullName.Contains("ReSharper", StringComparison.OrdinalIgnoreCase))
+        {
+            // Skip test if running under ReSharper
+            TestOutput.WriteLine("Running under ReSharper, skipping test");
+            return;
+        }
+
         // Act
         var buildConfiguration = BenchmarkProgram.BuildConfiguration;
 
@@ -79,6 +86,13 @@ public class BenchmarkProgramTest : Test
         {
             // Skip test if entry assembly is not available
             TestOutput.WriteLine("Entry assembly is null, skipping test");
+            return;
+        }
+
+        if (entryAssembly.FullName.Contains("ReSharper", StringComparison.OrdinalIgnoreCase))
+        {
+            // Skip test if running under ReSharper
+            TestOutput.WriteLine("Running under ReSharper, skipping test");
             return;
         }
 

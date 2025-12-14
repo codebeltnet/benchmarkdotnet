@@ -12,6 +12,7 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Runner
             BenchmarkProgram.Run(args, o =>
             {
                 o.AllowDebugBuild = BenchmarkProgram.IsDebugBuild;
+                o.SkipBenchmarksWithReports = true;
                 o.ConfigureBenchmarkDotNet(c =>
                 {
                     var slimJob = BenchmarkWorkspaceOptions.Slim;

@@ -584,20 +584,6 @@ public class BenchmarkWorkspaceOptionsTest : Test
     }
 
     [Fact]
-    public void Configuration_ShouldHaveDanishCultureInfo()
-    {
-        // Arrange & Act
-        var options = new BenchmarkWorkspaceOptions();
-
-        // Assert
-        Assert.NotNull(options.Configuration.SummaryStyle);
-        Assert.NotNull(options.Configuration.SummaryStyle.CultureInfo);
-        Assert.Equal("da-DK", options.Configuration.SummaryStyle.CultureInfo.Name);
-
-        TestOutput.WriteLine($"CultureInfo: {options.Configuration.SummaryStyle.CultureInfo.Name}");
-    }
-
-    [Fact]
     public void Configuration_ShouldHaveDisabledLogFile()
     {
         // Arrange & Act
@@ -645,5 +631,28 @@ public class BenchmarkWorkspaceOptionsTest : Test
         Assert.True(jobs[0].Meta.IsDefault);
 
         TestOutput.WriteLine($"Default Job - WarmupCount: {jobs[0].Run.WarmupCount}");
+    }
+
+    [Fact]
+    public void SkipBenchmarksWithReports_ShouldDefaultToFalse()
+    {
+        // Arrange & Act
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Assert
+        Assert.False(options.SkipBenchmarksWithReports);
+    }
+
+    [Fact]
+    public void SkipBenchmarksWithReports_ShouldBeSettable()
+    {
+        // Arrange
+        var options = new BenchmarkWorkspaceOptions();
+
+        // Act
+        options.SkipBenchmarksWithReports = true;
+
+        // Assert
+        Assert.True(options.SkipBenchmarksWithReports);
     }
 }
