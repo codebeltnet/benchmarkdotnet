@@ -188,11 +188,10 @@ public sealed class BenchmarkWorkspace : IBenchmarkWorkspace
 
         Directory.CreateDirectory(reportsTuningPath);
 
-        foreach (var file in Directory.GetFiles(reportsResultsPath).Where(s => !s.EndsWith(".lock")))
+        foreach (var file in Directory.GetFiles(reportsResultsPath))
         {
             var targetFile = Path.Combine(reportsTuningPath, Path.GetFileName(file));
-            File.Delete(targetFile);
-            File.Move(file, targetFile);
+            File.Move(file, targetFile, true);
         }
 
         Directory.Delete(reportsResultsPath, recursive: true);
