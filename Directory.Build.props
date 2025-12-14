@@ -6,7 +6,7 @@
     <IsToolingProject>$(MSBuildProjectDirectory.ToLower().StartsWith('$(MSBuildThisFileDirectory.ToLower())tooling'))</IsToolingProject>
     <IsLinux>$([MSBuild]::IsOSPlatform('Linux'))</IsLinux>
     <IsWindows>$([MSBuild]::IsOSPlatform('Windows'))</IsWindows>
-    <IsMainAuthor Condition="'$(EMAIL)' == 'classlibrary1@dot.net'">true</IsMainAuthor>
+    <IsMainAuthor Condition="'$(EMAIL)' == 'michael@geekle.io'">true</IsMainAuthor>
     <SkipSignAssembly>false</SkipSignAssembly>
     <PackageReleaseNotesFile>..\..\.nuget\$(MSBuildProjectName)\PackageReleaseNotes.txt</PackageReleaseNotesFile>
     <LangVersion>latest</LangVersion>
