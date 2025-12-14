@@ -59,10 +59,12 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
 
             if (options.SkipBenchmarksWithReports)
             {
-                var benchmarkTypes = assemblies.SelectMany(a => a.GetTypes().Where(t => t.Name.EndsWith("Benchmark"))).ToList();
+                var benchmarkTypes = assemblies.SelectMany(a => a.GetTypes().Where(t => t.Name.EndsWith("Benchmark", StringComparison.Ordinal))).ToList();
                 options.ConfigureBenchmarkDotNet(c =>
                 {
-                    var reports = Directory.EnumerateFiles(BenchmarkWorkspace.GetReportsTuningPath(options));
+                    var tuningPath = BenchmarkWorkspace.GetReportsTuningPath(options);
+                    if (!Directory.Exists(tuningPath)) { return c; }
+                    var reports = Directory.EnumerateFiles(tuningPath);
                     foreach (var report in reports)
                     {
                         var filename = Path.GetFileNameWithoutExtension(report);
@@ -72,7 +74,7 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
                         var potentialTypeName = potentialTypeFullName.Split('.').LastOrDefault();
                         if (string.IsNullOrWhiteSpace(potentialTypeName)) { continue; }
 
-                        var matchingType = benchmarkTypes.SingleOrDefault(t => t.Name.Equals(potentialTypeName, StringComparison.OrdinalIgnoreCase));
+                        var matchingType = benchmarkTypes.FirstOrDefault(t => t.Name.Equals(potentialTypeName, StringComparison.OrdinalIgnoreCase));
 
                         if (matchingType != null)
                         {
