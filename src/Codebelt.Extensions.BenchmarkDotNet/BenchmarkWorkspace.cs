@@ -22,6 +22,34 @@ public sealed class BenchmarkWorkspace : IBenchmarkWorkspace
     private static Dictionary<string, string> _assemblyLookup = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
+    /// Gets the path to the BenchmarkDotNet results directory
+    /// </summary>
+    /// <param name="options">The <see cref="BenchmarkWorkspaceOptions"/> which configures repository paths, build modes and BenchmarkDotNet configuration.</param>
+    /// <returns>A string containing the full path to the 'results' directory within the artifacts path.</returns>
+    /// <remarks>
+    /// This path is constructed from the configured <see cref="IConfig.ArtifactsPath"/> and the "results" subdirectory.
+    /// </remarks>
+    public static string GetReportsResultsPath(BenchmarkWorkspaceOptions options)
+    {
+        Validator.ThrowIfInvalidOptions(options);
+        return Path.Combine(options.Configuration.ArtifactsPath, "results");
+    }
+
+    /// <summary>
+    /// Gets the path to the tuning folder where final benchmark reports are stored.
+    /// </summary>
+    /// <param name="options">The <see cref="BenchmarkWorkspaceOptions"/> which configures repository paths, build modes and BenchmarkDotNet configuration.</param>
+    /// <returns>A string representing the full path to the tuning reports directory.</returns>
+    /// <remarks>
+    /// This path is constructed from the configured <see cref="IConfig.ArtifactsPath"/> and the <see cref="BenchmarkWorkspaceOptions.RepositoryTuningFolder"/>.
+    /// </remarks>
+    public static string GetReportsTuningPath(BenchmarkWorkspaceOptions options)
+    {
+        Validator.ThrowIfInvalidOptions(options);
+        return Path.Combine(options.Configuration.ArtifactsPath, options.RepositoryTuningFolder);
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="BenchmarkWorkspace"/> class with the specified options.
     /// </summary>
     /// <param name="options">The <see cref="BenchmarkWorkspaceOptions"/> which configures repository paths, build modes and BenchmarkDotNet configuration.</param>
@@ -74,9 +102,7 @@ public sealed class BenchmarkWorkspace : IBenchmarkWorkspace
     /// </remarks>
     public void PostProcessArtifacts()
     {
-        var reportsResultsPath = Path.Combine(_options.Configuration.ArtifactsPath, "results");
-        var reportsTuningPath = Path.Combine(_options.Configuration.ArtifactsPath, _options.RepositoryTuningFolder);
-        CleanupResults(reportsResultsPath, reportsTuningPath);
+        CleanupResults(GetReportsResultsPath(_options), GetReportsTuningPath(_options));
     }
 
     private static IEnumerable<Assembly> LoadAssemblies(string repositoryPath, string targetFrameworkMoniker, string benchmarkProjectSuffix, string repositoryTuningFolder, bool useDebugBuild)

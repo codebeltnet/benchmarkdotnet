@@ -627,4 +627,178 @@ public class BenchmarkWorkspaceTest : Test
             }
         }
     }
+
+    [Fact]
+    public void GetReportsResultsPath_ShouldReturnCorrectPath_WhenOptionsAreValid()
+    {
+        // Arrange
+        var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        try
+        {
+            Directory.CreateDirectory(tempPath);
+            var artifactsPath = Path.Combine(tempPath, "artifacts");
+            var config = ManualConfig.CreateEmpty().WithArtifactsPath(artifactsPath);
+            var options = new BenchmarkWorkspaceOptions
+            {
+                RepositoryPath = tempPath,
+                Configuration = config
+            };
+
+            // Act
+            var resultsPath = BenchmarkWorkspace.GetReportsResultsPath(options);
+
+            // Assert
+            var expectedPath = Path.Combine(artifactsPath, "results");
+            Assert.Equal(expectedPath, resultsPath);
+
+            TestOutput.WriteLine($"Results path: {resultsPath}");
+        }
+        finally
+        {
+            if (Directory.Exists(tempPath))
+            {
+                Directory.Delete(tempPath, true);
+            }
+        }
+    }
+
+    [Fact]
+    public void GetReportsResultsPath_ShouldThrowArgumentException_WhenOptionsAreInvalid()
+    {
+        // Arrange
+        var options = new BenchmarkWorkspaceOptions
+        {
+            RepositoryPath = null
+        };
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => BenchmarkWorkspace.GetReportsResultsPath(options));
+    }
+
+    [Fact]
+    public void GetReportsResultsPath_ShouldThrowArgumentNullException_WhenOptionsIsNull()
+    {
+        // Arrange
+        BenchmarkWorkspaceOptions options = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => BenchmarkWorkspace.GetReportsResultsPath(options));
+    }
+
+    [Fact]
+    public void GetReportsTuningPath_ShouldReturnCorrectPath_WhenOptionsAreValid()
+    {
+        // Arrange
+        var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        try
+        {
+            Directory.CreateDirectory(tempPath);
+            var artifactsPath = Path.Combine(tempPath, "artifacts");
+            var config = ManualConfig.CreateEmpty().WithArtifactsPath(artifactsPath);
+            var options = new BenchmarkWorkspaceOptions
+            {
+                RepositoryPath = tempPath,
+                Configuration = config,
+                RepositoryTuningFolder = "tuning"
+            };
+
+            // Act
+            var tuningPath = BenchmarkWorkspace.GetReportsTuningPath(options);
+
+            // Assert
+            var expectedPath = Path.Combine(artifactsPath, "tuning");
+            Assert.Equal(expectedPath, tuningPath);
+
+            TestOutput.WriteLine($"Tuning path: {tuningPath}");
+        }
+        finally
+        {
+            if (Directory.Exists(tempPath))
+            {
+                Directory.Delete(tempPath, true);
+            }
+        }
+    }
+
+    [Fact]
+    public void GetReportsTuningPath_ShouldThrowArgumentException_WhenOptionsAreInvalid()
+    {
+        // Arrange
+        var options = new BenchmarkWorkspaceOptions
+        {
+            RepositoryPath = null
+        };
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => BenchmarkWorkspace.GetReportsTuningPath(options));
+    }
+
+    [Fact]
+    public void GetReportsTuningPath_ShouldThrowArgumentNullException_WhenOptionsIsNull()
+    {
+        // Arrange
+        BenchmarkWorkspaceOptions options = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => BenchmarkWorkspace.GetReportsTuningPath(options));
+    }
+
+    [Fact]
+    public void GetReportsTuningPath_ShouldUseCustomTuningFolder_WhenSpecified()
+    {
+        // Arrange
+        var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        try
+        {
+            Directory.CreateDirectory(tempPath);
+            var artifactsPath = Path.Combine(tempPath, "artifacts");
+            var customTuningFolder = "custom-tuning";
+            var config = ManualConfig.CreateEmpty().WithArtifactsPath(artifactsPath);
+            var options = new BenchmarkWorkspaceOptions
+            {
+                RepositoryPath = tempPath,
+                Configuration = config,
+                RepositoryTuningFolder = customTuningFolder
+            };
+
+            // Act
+            var tuningPath = BenchmarkWorkspace.GetReportsTuningPath(options);
+
+            // Assert
+            var expectedPath = Path.Combine(artifactsPath, customTuningFolder);
+            Assert.Equal(expectedPath, tuningPath);
+            Assert.Contains(customTuningFolder, tuningPath);
+
+            TestOutput.WriteLine($"Custom tuning path: {tuningPath}");
+        }
+        finally
+        {
+            if (Directory.Exists(tempPath))
+            {
+                Directory.Delete(tempPath, true);
+            }
+        }
+    }
+
+    [Fact]
+    public void GetReportsResultsPath_AndGetReportsTuningPath_ShouldReturnDifferentPaths()
+    {
+        // Arrange
+        var options = new BenchmarkWorkspaceOptions
+        {
+            AllowDebugBuild = IsDebugBuild
+        };
+
+        // Act
+        var resultsPath = BenchmarkWorkspace.GetReportsResultsPath(options);
+        var tuningPath = BenchmarkWorkspace.GetReportsTuningPath(options);
+
+        // Assert
+        Assert.NotEqual(resultsPath, tuningPath);
+        Assert.Contains("results", resultsPath);
+        Assert.Contains("tuning", tuningPath);
+
+        TestOutput.WriteLine($"Results path: {resultsPath}");
+        TestOutput.WriteLine($"Tuning path: {tuningPath}");
+    }
 }
