@@ -7,7 +7,7 @@ Availability: .NET 10 and .NET 9
 # Improvements
 - EXTENDED BenchmarkProgram class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace to support an optional service configurator delegate for customizing the IServiceCollection during host building
 - EXTENDED BenchmarkWorker class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace to support skipping benchmarks that already have generated reports based on the BenchmarkWorkspaceOptions.SkipBenchmarksWithReports property
-- CHANGED BenchmarkWorker class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace to conditionally suppress console status messages in services based on wether you are in a debugging session or not
+- CHANGED BenchmarkWorker class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace to conditionally suppress console status messages in services based on whether you are in a debugging session or not
  
 Version: 1.0.0
 Availability: .NET 10 and .NET 9
