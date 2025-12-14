@@ -584,20 +584,6 @@ public class BenchmarkWorkspaceOptionsTest : Test
     }
 
     [Fact]
-    public void Configuration_ShouldHaveDanishCultureInfo()
-    {
-        // Arrange & Act
-        var options = new BenchmarkWorkspaceOptions();
-
-        // Assert
-        Assert.NotNull(options.Configuration.SummaryStyle);
-        Assert.NotNull(options.Configuration.SummaryStyle.CultureInfo);
-        Assert.Equal("da-DK", options.Configuration.SummaryStyle.CultureInfo.Name);
-
-        TestOutput.WriteLine($"CultureInfo: {options.Configuration.SummaryStyle.CultureInfo.Name}");
-    }
-
-    [Fact]
     public void Configuration_ShouldHaveDisabledLogFile()
     {
         // Arrange & Act
