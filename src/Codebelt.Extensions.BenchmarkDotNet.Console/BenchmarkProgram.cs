@@ -93,7 +93,7 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
                 services.AddBenchmarkWorkspace<TWorkspace>(setup);
                 serviceConfigurator?.Invoke(services);
             });
-            var host = hostBuilder.Build();
+            using var host = hostBuilder.Build();
             host.Run();
         }
     }
