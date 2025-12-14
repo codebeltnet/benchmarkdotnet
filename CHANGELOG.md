@@ -12,7 +12,7 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 - `BenchmarkWorkspaceOptions` class in the Codebelt.Extensions.BenchmarkDotNet namespace was extended with an additional new property; `SkipBenchmarksWithReports` that indicates whether benchmarks that already have generated reports should be skipped during execution,
 - `BenchmarkProgram` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace was extended to support an optional service configurator delegate for customizing the `IServiceCollection` during host building,
 - `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace was extended to support skipping benchmarks that already have generated reports based on the `BenchmarkWorkspaceOptions.SkipBenchmarksWithReports` property,
-- `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace was changed to conditionally suppress console status messages in services based on wether you are in a debugging session or not.
+- `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace was changed to conditionally suppress console status messages in services based on whether you are in a debugging session or not.
 
 ### Fixed
 
