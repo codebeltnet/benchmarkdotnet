@@ -19,7 +19,7 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
     /// <summary>
     /// Entry point helper for hosting and running benchmarks using BenchmarkDotNet.
     /// </summary>
-    /// <seealso cref="ConsoleProgram{TStartup}"/>
+    /// <seealso cref="MinimalConsoleProgram{BenchmarkProgram}"/>
     public class BenchmarkProgram : MinimalConsoleProgram<BenchmarkProgram>
     {
         static BenchmarkProgram()
