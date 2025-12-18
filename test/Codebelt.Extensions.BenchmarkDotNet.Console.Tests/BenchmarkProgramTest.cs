@@ -248,7 +248,7 @@ public class BenchmarkProgramTest : Test
         // Assert
         Assert.NotNull(baseType);
         Assert.True(baseType.IsGenericType);
-        Assert.Equal("ConsoleProgram`1", baseType.Name);
+        Assert.Equal("MinimalConsoleProgram`1", baseType.Name);
 
         TestOutput.WriteLine($"BenchmarkProgram correctly inherits from: {baseType.FullName}");
     }
@@ -263,7 +263,7 @@ public class BenchmarkProgramTest : Test
         // Assert
         Assert.NotNull(genericArguments);
         Assert.Single(genericArguments);
-        Assert.Equal(typeof(BenchmarkWorker), genericArguments[0]);
+        Assert.Equal(typeof(BenchmarkProgram), genericArguments[0]);
 
         TestOutput.WriteLine($"BenchmarkProgram uses correct generic type parameter: {genericArguments[0].Name}");
     }
