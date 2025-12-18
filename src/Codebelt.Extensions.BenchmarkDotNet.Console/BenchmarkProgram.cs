@@ -113,7 +113,7 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
         /// <returns>A completed task when benchmark execution has finished.</returns>
         /// <remarks>
         /// When arguments are provided, they are forwarded to <see cref="BenchmarkSwitcher"/> for selective execution.
-        /// After execution completes, the worker performs artifact post-processing.
+        /// After execution completes, artifact post-processing is performed.
         /// </remarks>
         public override Task RunAsync(IServiceProvider serviceProvider, CancellationToken cancellationToken)
         {
