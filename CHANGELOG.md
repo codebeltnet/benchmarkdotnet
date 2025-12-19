@@ -4,7 +4,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [1.2.0] - 2025-12-19
+
+Technically, this is a major release due to the removal of BenchmarkWorker class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace. However, since this library is new and the external API remains unchanged, we have decided to label this release as a minor update.
+
+### Removed
+
+- `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace has been removed. Its functionality has been merged into the `BenchmarkProgram` class to streamline the hosting and execution of benchmarks.
+
 ## [1.1.0] - 2025-12-14
+
+This release introduces several enhancements and fixes to improve the functionality and usability of the `Codebelt.Extensions.BenchmarkDotNet` and `Codebelt.Extensions.BenchmarkDotNet.Console` packages.
 
 ### Changed
 
