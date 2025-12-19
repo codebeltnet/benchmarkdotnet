@@ -121,7 +121,7 @@ public sealed class BenchmarkWorkspace : IBenchmarkWorkspace
 
         var candidatePaths = Directory
             .EnumerateFiles(tuningDir, $"*.{benchmarkProjectSuffix}.dll", SearchOption.AllDirectories)
-            .Where(path => path.IndexOf(buildSegment, StringComparison.OrdinalIgnoreCase) >= 0);
+            .Where(path => path.Contains(buildSegment, StringComparison.OrdinalIgnoreCase));
 
         foreach (var path in candidatePaths)
         {

@@ -1,3 +1,12 @@
+Version: 1.2.0
+Availability: .NET 10 and .NET 9
+ 
+# ALM
+- CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
+ 
+# Breaking Changes
+- REMOVED BenchmarkWorker class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace and functionality has been merged into the BenchmarkProgram class to streamline the hosting and execution of benchmarks
+ 
 Version: 1.1.0
 Availability: .NET 10 and .NET 9
  
