@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [1.2.1] - 2026-01-20
+
+This is a service update that focuses on package dependencies.
+
 ## [1.2.0] - 2025-12-19
 
 Technically, this is a major release due to the removal of BenchmarkWorker class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace. However, since this library is new and the external API remains unchanged, we have decided to label this release as a minor update.
