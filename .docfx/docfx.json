@@ -19,7 +19,7 @@
   ],
   "build": {
     "xref": [
-      "https://docs.cuemon.net/xrefmap.yml",
+      "https://docs.cuemon.net/xrefmap.yml?v=20260120",
       "https://bootstrapper.codebelt.net/xrefmap.yml",
       "https://github.com/dotnet/docfx/raw/main/.xrefmap.json"
     ],
