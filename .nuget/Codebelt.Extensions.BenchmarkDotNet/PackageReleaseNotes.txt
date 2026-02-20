@@ -1,4 +1,4 @@
-Version 1.2.3
+Version: 1.2.3
 Availability: .NET 10 and .NET 9
  
 # ALM
