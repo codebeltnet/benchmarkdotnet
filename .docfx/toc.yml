@@ -1,4 +1,4 @@
-- name: Bootstrapper API
+- name: BenchmarkDotNet API
   href: api/Codebelt.Extensions.BenchmarkDotNet.html
 - name: NuGet
   href: packages
