@@ -6,13 +6,23 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ## [1.2.5] - 2026-03-23
 
-This is a patch release focused on keeping package dependencies current.
+This is a patch release focused on keeping package dependencies current, improving documentation branding, and hardening the build and test infrastructure.
+
+### Added
+
+- Added `Docker-Ubuntu (net10)` test environment for explicit .NET 10 testing,
+- Added Carter package mapper to automated NuGet version-bump detection in CI.
 
 ### Changed
 
 - Upgraded `Codebelt.Bootstrapper.Console` from 5.0.4 to 5.0.5,
 - Upgraded `Codebelt.Extensions.Xunit.App` from 11.0.7 to 11.0.8,
-- Upgraded `Cuemon.Core` from 10.4.0 to 10.5.0.
+- Upgraded `Cuemon.Core` from 10.4.0 to 10.5.0,
+- Upgraded `coverlet.collector` and `coverlet.msbuild` to 8.0.1,
+- Renamed `Docker-Ubuntu` test environment to `Docker-Ubuntu (net9)` for clarity,
+- Simplified MSBuild task for reading package release notes from file-based approach to direct `System.IO.File::ReadAllText`,
+- Updated DocFX API documentation homepage title from "Bootstrapper API" to "BenchmarkDotNet API",
+- Fixed formatting in GitHub Actions service-update workflow for release notes entry generation.
 
 ## [1.2.4] - 2026-02-28
 
