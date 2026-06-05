@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>Codebelt.Extensions.BenchmarkDotNet</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Codebelt.Extensions.BenchmarkDotNet\Codebelt.Extensions.BenchmarkDotNet.csproj" />
+		<ProjectReference Include="..\..\src\Codebelt.Extensions.BenchmarkDotNet.Console\Codebelt.Extensions.BenchmarkDotNet.Console.csproj" />
+		<ProjectReference Include="..\..\tooling\Codebelt.Extensions.BenchmarkDotNet.Runner\Codebelt.Extensions.BenchmarkDotNet.Runner.csproj" Condition="'$(TargetFramework)' == 'net10.0'" />
+	</ItemGroup>
+
+</Project>

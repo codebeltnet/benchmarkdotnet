@@ -94,15 +94,69 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
         /// </remarks>
         public static void Run<TWorkspace>(string[] args, Action<IServiceCollection> serviceConfigurator = null, Action<BenchmarkWorkspaceOptions> setup = null) where TWorkspace : class, IBenchmarkWorkspace
         {
-            var builder = CreateHostBuilder(args);
-            
-            builder.Services.Configure<ConsoleLifetimeOptions>(o => o.SuppressStatusMessages = !IsDebugBuild);
-            builder.Services.AddSingleton(new BenchmarkContext(args));
-            builder.Services.AddBenchmarkWorkspace<TWorkspace>(setup);
-            serviceConfigurator?.Invoke(builder.Services);
-            
-            using var host = builder.Build();
+            using var host = BuildHost<TWorkspace>(args, serviceConfigurator, setup);
             host.Run();
+        }
+
+        /// <summary>
+        /// Runs benchmarks asynchronously using the default <see cref="BenchmarkWorkspace"/> implementation.
+        /// </summary>
+        /// <param name="args">The command-line arguments passed to the application.</param>
+        /// <param name="setup">The <see cref="BenchmarkWorkspaceOptions"/> which may be configured.</param>
+        /// <returns>A task that represents the asynchronous benchmark host operation.</returns>
+        /// <remarks>
+        /// This method configures the host builder with the necessary services, builds the host, and runs it asynchronously to execute benchmarks.
+        /// </remarks>
+        public static Task RunAsync(string[] args, Action<BenchmarkWorkspaceOptions> setup = null)
+        {
+            return RunAsync(args, null, setup);
+        }
+
+        /// <summary>
+        /// Runs benchmarks asynchronously using the default <see cref="BenchmarkWorkspace"/> implementation.
+        /// </summary>
+        /// <param name="args">The command-line arguments passed to the application.</param>
+        /// <param name="serviceConfigurator">The delegate that will be invoked to configure additional services in the <see cref="IServiceCollection"/>.</param>
+        /// <param name="setup">The <see cref="BenchmarkWorkspaceOptions"/> which may be configured.</param>
+        /// <returns>A task that represents the asynchronous benchmark host operation.</returns>
+        /// <remarks>
+        /// This method configures the host builder with the necessary services, builds the host, and runs it asynchronously to execute benchmarks.
+        /// </remarks>
+        public static Task RunAsync(string[] args, Action<IServiceCollection> serviceConfigurator = null, Action<BenchmarkWorkspaceOptions> setup = null)
+        {
+            return RunAsync<BenchmarkWorkspace>(args, serviceConfigurator, setup);
+        }
+
+        /// <summary>
+        /// Runs benchmarks asynchronously using a custom implementation of <see cref="IBenchmarkWorkspace"/>.
+        /// </summary>
+        /// <typeparam name="TWorkspace">The type of the workspace that implements <see cref="IBenchmarkWorkspace"/>.</typeparam>
+        /// <param name="args">The command-line arguments passed to the application.</param>
+        /// <param name="setup">The <see cref="BenchmarkWorkspaceOptions"/> which may be configured.</param>
+        /// <returns>A task that represents the asynchronous benchmark host operation.</returns>
+        /// <remarks>
+        /// This method configures the host builder with the necessary services, builds the host, and runs it asynchronously to execute benchmarks.
+        /// </remarks>
+        public static Task RunAsync<TWorkspace>(string[] args, Action<BenchmarkWorkspaceOptions> setup = null) where TWorkspace : class, IBenchmarkWorkspace
+        {
+            return RunAsync<TWorkspace>(args, null, setup);
+        }
+
+        /// <summary>
+        /// Runs benchmarks asynchronously using a custom implementation of <see cref="IBenchmarkWorkspace"/>.
+        /// </summary>
+        /// <typeparam name="TWorkspace">The type of the workspace that implements <see cref="IBenchmarkWorkspace"/>.</typeparam>
+        /// <param name="args">The command-line arguments passed to the application.</param>
+        /// <param name="serviceConfigurator">The delegate that will be invoked to configure additional services in the <see cref="IServiceCollection"/>.</param>
+        /// <param name="setup">The <see cref="BenchmarkWorkspaceOptions"/> which may be configured.</param>
+        /// <returns>A task that represents the asynchronous benchmark host operation.</returns>
+        /// <remarks>
+        /// This method configures the host builder with the necessary services, builds the host, and runs it asynchronously to execute benchmarks.
+        /// </remarks>
+        public static async Task RunAsync<TWorkspace>(string[] args, Action<IServiceCollection> serviceConfigurator = null, Action<BenchmarkWorkspaceOptions> setup = null) where TWorkspace : class, IBenchmarkWorkspace
+        {
+            using var host = BuildHost<TWorkspace>(args, serviceConfigurator, setup);
+            await host.RunAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -134,6 +188,18 @@ namespace Codebelt.Extensions.BenchmarkDotNet.Console
             }
 
             return Task.CompletedTask;
+        }
+
+        private static IHost BuildHost<TWorkspace>(string[] args, Action<IServiceCollection> serviceConfigurator, Action<BenchmarkWorkspaceOptions> setup) where TWorkspace : class, IBenchmarkWorkspace
+        {
+            var builder = CreateHostBuilder(args);
+
+            builder.Services.Configure<ConsoleLifetimeOptions>(o => o.SuppressStatusMessages = !IsDebugBuild);
+            builder.Services.AddSingleton(new BenchmarkContext(args));
+            builder.Services.AddBenchmarkWorkspace<TWorkspace>(setup);
+            serviceConfigurator?.Invoke(builder.Services);
+
+            return builder.Build();
         }
 
         private static void ConfigureBenchmarkDotNetFiltersForExistingReports(BenchmarkWorkspaceOptions options, Assembly[] assemblies)

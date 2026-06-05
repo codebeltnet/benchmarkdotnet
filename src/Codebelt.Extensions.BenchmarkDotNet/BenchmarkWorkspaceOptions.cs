@@ -9,7 +9,6 @@ using Cuemon;
 using Cuemon.Configuration;
 using Perfolizer.Horology;
 using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -247,6 +246,60 @@ public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfi
             .DontEnforcePowerPlan(); // make sure BDN does not try to enforce High Performance power plan on Windows
     }
 
+    private static string ParseTargetFrameworkMoniker(string frameworkName)
+    {
+        if (string.IsNullOrEmpty(frameworkName))
+        {
+            return null;
+        }
+
+        try
+        {
+            var fn = new FrameworkName(frameworkName);
+            var v = fn.Version;
+
+            // .NET Framework → net11, net20, net35, net40, net403, net45, net451, ..., net48, net481
+            if (fn.Identifier.Equals(".NETFramework", StringComparison.OrdinalIgnoreCase))
+            {
+                // Base: net4{minor} or net{major}{minor} for older ones
+                var tfm = $"net{v.Major}{v.Minor}";
+
+                // For 4.x: append Build when present (4.0.3 → net403, 4.5.1 → net451, 4.8.1 → net481)
+                if (v.Major >= 4 && v.Build > 0)
+                {
+                    tfm += v.Build;
+                }
+
+                return tfm;
+            }
+
+            // .NET Standard → netstandard1.0–2.1
+            if (fn.Identifier.Equals(".NETStandard", StringComparison.OrdinalIgnoreCase))
+            {
+                return $"netstandard{v.Major}.{v.Minor}";
+            }
+
+            // .NET Core / .NET (CoreApp)
+            if (fn.Identifier.Equals(".NETCoreApp", StringComparison.OrdinalIgnoreCase))
+            {
+                // .NET Core 1.0–3.1 use netcoreappX.Y
+                if (v.Major <= 3)
+                {
+                    return $"netcoreapp{v.Major}.{v.Minor}";
+                }
+
+                // .NET 5+ uses netX.Y
+                return $"net{v.Major}.{v.Minor}";
+            }
+        }
+        catch
+        {
+            // ignore invalid framework names
+        }
+
+        return null;
+    }
+
     private static string ResolveCurrentTfm()
     {
         try
@@ -255,41 +308,10 @@ public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfi
             var tfa = entry?.GetCustomAttribute<TargetFrameworkAttribute>();
             if (!string.IsNullOrEmpty(tfa?.FrameworkName))
             {
-                var fn = new FrameworkName(tfa.FrameworkName);
-                var v = fn.Version;
-
-                // .NET Framework → net11, net20, net35, net40, net403, net45, net451, ..., net48, net481
-                if (fn.Identifier.Equals(".NETFramework", StringComparison.OrdinalIgnoreCase))
+                var result = ParseTargetFrameworkMoniker(tfa.FrameworkName);
+                if (result != null)
                 {
-                    // Base: net4{minor} or net{major}{minor} for older ones
-                    var tfm = $"net{v.Major}{v.Minor}";
-
-                    // For 4.x: append Build when present (4.0.3 → net403, 4.5.1 → net451, 4.8.1 → net481)
-                    if (v.Major >= 4 && v.Build > 0)
-                    {
-                        tfm += v.Build;
-                    }
-
-                    return tfm;
-                }
-
-                // .NET Standard → netstandard1.0–2.1
-                if (fn.Identifier.Equals(".NETStandard", StringComparison.OrdinalIgnoreCase))
-                {
-                    return $"netstandard{v.Major}.{v.Minor}";
-                }
-
-                // .NET Core / .NET (CoreApp)
-                if (fn.Identifier.Equals(".NETCoreApp", StringComparison.OrdinalIgnoreCase))
-                {
-                    // .NET Core 1.0–3.1 use netcoreappX.Y
-                    if (v.Major <= 3)
-                    {
-                        return $"netcoreapp{v.Major}.{v.Minor}";
-                    }
-
-                    // .NET 5+ uses netX.Y
-                    return $"net{v.Major}.{v.Minor}";
+                    return result;
                 }
             }
         }

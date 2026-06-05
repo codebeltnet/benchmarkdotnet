@@ -1,3 +1,12 @@
+Version: 1.3.0
+Availability: .NET 10 and .NET 9
+
+# ALM
+- CHANGED Microsoft.NET.Test.Sdk has been upgraded from version 18.5.1 to 18.6.0 for improved test framework reliability
+
+# Improvements
+- EXTENDED BenchmarkProgram class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace to include RunAsync equivalent methods of the existing Run methods for improved asynchronous hosting scenarios
+
 Version: 1.2.7
 Availability: .NET 10 and .NET 9
 

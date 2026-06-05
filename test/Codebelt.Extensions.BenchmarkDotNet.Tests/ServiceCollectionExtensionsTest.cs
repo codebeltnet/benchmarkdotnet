@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using Codebelt.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace Codebelt.Extensions.BenchmarkDotNet
@@ -44,6 +45,26 @@ namespace Codebelt.Extensions.BenchmarkDotNet
 
             var options = sp.GetRequiredService<BenchmarkWorkspaceOptions>();
             Assert.Equal("repo-path", options.RepositoryPath);
+        }
+
+        [Fact]
+        public void AddBenchmarkWorkspace_GenericOverload_ShouldUseNullCoalescingLambda_WhenSetupIsNull()
+        {
+            // When setup is null, the Configure call registers a no-op lambda (_ => {}).
+            // Resolving IOptions<BenchmarkWorkspaceOptions>.Value causes the Options framework to
+            // invoke all registered configure-actions, which executes the null-coalescing lambda body.
+            var services = new ServiceCollection();
+            services.AddBenchmarkWorkspace<FakeWorkspace>(setup: null);
+            using var sp = services.BuildServiceProvider();
+
+            // Resolving via IOptions<T> triggers the registered configure action (the no-op lambda)
+            var optionsAccessor = sp.GetRequiredService<IOptions<BenchmarkWorkspaceOptions>>();
+            var options = optionsAccessor.Value;
+
+            Assert.NotNull(options);
+            Assert.IsType<FakeWorkspace>(sp.GetRequiredService<IBenchmarkWorkspace>());
+
+            TestOutput.WriteLine($"BenchmarkProjectSuffix: {options.BenchmarkProjectSuffix}");
         }
 
         private sealed class FakeWorkspace : IBenchmarkWorkspace
