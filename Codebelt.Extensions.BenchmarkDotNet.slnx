@@ -4,7 +4,9 @@
     <Project Path="src/Codebelt.Extensions.BenchmarkDotNet/Codebelt.Extensions.BenchmarkDotNet.csproj" />
   </Folder>
   <Folder Name="/test/">
+    <Project Path="test/Codebelt.Extensions.BenchmarkDotNet.Console.FunctionalTests/Codebelt.Extensions.BenchmarkDotNet.Console.FunctionalTests.csproj" />
     <Project Path="test/Codebelt.Extensions.BenchmarkDotNet.Console.Tests/Codebelt.Extensions.BenchmarkDotNet.Console.Tests.csproj" />
+    <Project Path="test/Codebelt.Extensions.BenchmarkDotNet.FunctionalTests/Codebelt.Extensions.BenchmarkDotNet.FunctionalTests.csproj" />
     <Project Path="test/Codebelt.Extensions.BenchmarkDotNet.Tests/Codebelt.Extensions.BenchmarkDotNet.Tests.csproj" />
   </Folder>
   <Folder Name="/tooling/">

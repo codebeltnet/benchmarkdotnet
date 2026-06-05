@@ -3,6 +3,7 @@ using Codebelt.Extensions.Xunit;
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace Codebelt.Extensions.BenchmarkDotNet;
@@ -655,4 +656,107 @@ public class BenchmarkWorkspaceOptionsTest : Test
         // Assert
         Assert.True(options.SkipBenchmarksWithReports);
     }
+
+    [Theory]
+    [InlineData(".NETFramework,Version=v1.1", "net11")]
+    [InlineData(".NETFramework,Version=v2.0", "net20")]
+    [InlineData(".NETFramework,Version=v3.5", "net35")]
+    [InlineData(".NETFramework,Version=v4.0", "net40")]
+    [InlineData(".NETFramework,Version=v4.0.3", "net403")]
+    [InlineData(".NETFramework,Version=v4.5.1", "net451")]
+    [InlineData(".NETFramework,Version=v4.7.2", "net472")]
+    [InlineData(".NETFramework,Version=v4.8", "net48")]
+    [InlineData(".NETFramework,Version=v4.8.1", "net481")]
+    public void ParseTargetFrameworkMoniker_ShouldReturnCorrectTfm_ForNETFramework(string frameworkName, string expectedTfm)
+    {
+        // Act
+        var result = ParseTargetFrameworkMoniker(frameworkName);
+
+        // Assert
+        Assert.Equal(expectedTfm, result);
+
+        TestOutput.WriteLine($"FrameworkName: {frameworkName} → TFM: {result}");
+    }
+
+    [Theory]
+    [InlineData(".NETStandard,Version=v1.0", "netstandard1.0")]
+    [InlineData(".NETStandard,Version=v1.6", "netstandard1.6")]
+    [InlineData(".NETStandard,Version=v2.0", "netstandard2.0")]
+    [InlineData(".NETStandard,Version=v2.1", "netstandard2.1")]
+    public void ParseTargetFrameworkMoniker_ShouldReturnCorrectTfm_ForNETStandard(string frameworkName, string expectedTfm)
+    {
+        // Act
+        var result = ParseTargetFrameworkMoniker(frameworkName);
+
+        // Assert
+        Assert.Equal(expectedTfm, result);
+
+        TestOutput.WriteLine($"FrameworkName: {frameworkName} → TFM: {result}");
+    }
+
+    [Theory]
+    [InlineData(".NETCoreApp,Version=v1.0", "netcoreapp1.0")]
+    [InlineData(".NETCoreApp,Version=v2.1", "netcoreapp2.1")]
+    [InlineData(".NETCoreApp,Version=v3.1", "netcoreapp3.1")]
+    public void ParseTargetFrameworkMoniker_ShouldReturnCorrectTfm_ForNETCoreApp(string frameworkName, string expectedTfm)
+    {
+        // Act
+        var result = ParseTargetFrameworkMoniker(frameworkName);
+
+        // Assert
+        Assert.Equal(expectedTfm, result);
+
+        TestOutput.WriteLine($"FrameworkName: {frameworkName} → TFM: {result}");
+    }
+
+    [Theory]
+    [InlineData(".NETCoreApp,Version=v5.0", "net5.0")]
+    [InlineData(".NETCoreApp,Version=v6.0", "net6.0")]
+    [InlineData(".NETCoreApp,Version=v8.0", "net8.0")]
+    [InlineData(".NETCoreApp,Version=v9.0", "net9.0")]
+    [InlineData(".NETCoreApp,Version=v10.0", "net10.0")]
+    public void ParseTargetFrameworkMoniker_ShouldReturnCorrectTfm_ForModernNet(string frameworkName, string expectedTfm)
+    {
+        // Act
+        var result = ParseTargetFrameworkMoniker(frameworkName);
+
+        // Assert
+        Assert.Equal(expectedTfm, result);
+
+        TestOutput.WriteLine($"FrameworkName: {frameworkName} → TFM: {result}");
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public void ParseTargetFrameworkMoniker_ShouldReturnNull_WhenFrameworkNameIsNullOrEmpty(string frameworkName)
+    {
+        // Act
+        var result = ParseTargetFrameworkMoniker(frameworkName);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Theory]
+    [InlineData("not-a-framework-name")]
+    [InlineData(".NETSomethingUnknown,Version=v1.0")]
+    public void ParseTargetFrameworkMoniker_ShouldReturnNull_WhenFrameworkNameIsUnrecognised(string frameworkName)
+    {
+        // Act
+        var result = ParseTargetFrameworkMoniker(frameworkName);
+
+        // Assert
+        Assert.Null(result);
+
+        TestOutput.WriteLine($"Unrecognised framework: {frameworkName} → null");
+    }
+
+    private static string ParseTargetFrameworkMoniker(string frameworkName)
+    {
+        return ParseTargetFrameworkMoniker(default(BenchmarkWorkspaceOptions), frameworkName);
+    }
+
+    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "ParseTargetFrameworkMoniker")]
+    private static extern string ParseTargetFrameworkMoniker(BenchmarkWorkspaceOptions target, string frameworkName);
 }

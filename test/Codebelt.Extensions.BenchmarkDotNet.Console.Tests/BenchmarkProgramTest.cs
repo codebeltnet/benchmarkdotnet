@@ -2,6 +2,7 @@ using System;
 using Codebelt.Extensions.Xunit;
 using System.Reflection;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Codebelt.Extensions.BenchmarkDotNet.Console;
@@ -351,6 +352,73 @@ public class BenchmarkProgramTest : Test
     }
 
     [Fact]
+    public void RunAsync_MethodWithDefaultWorkspace_ShouldExist()
+    {
+        // Act
+        var method = typeof(BenchmarkProgram).GetMethods(BindingFlags.Public | BindingFlags.Static)
+            .FirstOrDefault(m =>
+                m.Name == "RunAsync" &&
+                !m.IsGenericMethodDefinition &&
+                m.GetParameters().Length == 2 &&
+                m.GetParameters()[0].ParameterType == typeof(string[]) &&
+                m.GetParameters()[1].ParameterType == typeof(Action<BenchmarkWorkspaceOptions>));
+
+        // Assert
+        Assert.NotNull(method);
+        Assert.True(method.IsStatic);
+        Assert.True(method.IsPublic);
+        Assert.Equal(typeof(Task), method.ReturnType);
+
+        TestOutput.WriteLine($"Found RunAsync method with default workspace: {method}");
+    }
+
+    [Fact]
+    public void RunAsync_GenericMethod_ShouldExist()
+    {
+        // Act
+        var method = typeof(BenchmarkProgram).GetMethods(BindingFlags.Public | BindingFlags.Static)
+            .FirstOrDefault(m =>
+                m.Name == "RunAsync" &&
+                m.IsGenericMethodDefinition &&
+                m.GetParameters().Length == 2);
+
+        // Assert
+        Assert.NotNull(method);
+        Assert.True(method.IsStatic);
+        Assert.True(method.IsPublic);
+        Assert.True(method.IsGenericMethodDefinition);
+        Assert.Equal(typeof(Task), method.ReturnType);
+
+        var genericArguments = method.GetGenericArguments();
+        Assert.Single(genericArguments);
+
+        TestOutput.WriteLine($"Found generic RunAsync<TWorkspace> method: {method}");
+    }
+
+    [Fact]
+    public void RunAsync_GenericMethod_ShouldHaveCorrectConstraints()
+    {
+        // Act
+        var method = typeof(BenchmarkProgram).GetMethods(BindingFlags.Public | BindingFlags.Static)
+            .FirstOrDefault(m =>
+                m.Name == "RunAsync" &&
+                m.IsGenericMethodDefinition &&
+                m.GetParameters().Length == 2);
+
+        Assert.NotNull(method);
+
+        var genericArguments = method.GetGenericArguments();
+        var typeParameter = genericArguments[0];
+
+        // Assert
+        var constraints = typeParameter.GetGenericParameterConstraints();
+        Assert.Contains(constraints, c => c == typeof(IBenchmarkWorkspace));
+        Assert.True(typeParameter.GenericParameterAttributes.HasFlag(GenericParameterAttributes.ReferenceTypeConstraint));
+
+        TestOutput.WriteLine($"Generic type parameter '{typeParameter.Name}' has correct constraints: class, IBenchmarkWorkspace");
+    }
+
+    [Fact]
     public void StaticProperties_ShouldBeReadOnly()
     {
         // Act
@@ -407,6 +475,28 @@ public class BenchmarkProgramTest : Test
         // Assert
         Assert.NotNull(nonGenericMethod);
         
+        var setupParameter = nonGenericMethod.GetParameters()[1];
+        Assert.True(setupParameter.IsOptional);
+        Assert.Null(setupParameter.DefaultValue);
+
+        TestOutput.WriteLine($"Setup parameter is optional with default value: {setupParameter.DefaultValue ?? "null"}");
+    }
+
+    [Fact]
+    public void RunAsync_Methods_ShouldHaveOptionalSetupParameter()
+    {
+        // Act - Get the non-generic RunAsync method explicitly
+        var nonGenericMethod = typeof(BenchmarkProgram).GetMethods(BindingFlags.Public | BindingFlags.Static)
+            .FirstOrDefault(m =>
+                m.Name == "RunAsync" &&
+                !m.IsGenericMethodDefinition &&
+                m.GetParameters().Length == 2 &&
+                m.GetParameters()[0].ParameterType == typeof(string[]) &&
+                m.GetParameters()[1].ParameterType == typeof(Action<BenchmarkWorkspaceOptions>));
+
+        // Assert
+        Assert.NotNull(nonGenericMethod);
+
         var setupParameter = nonGenericMethod.GetParameters()[1];
         Assert.True(setupParameter.IsOptional);
         Assert.Null(setupParameter.DefaultValue);

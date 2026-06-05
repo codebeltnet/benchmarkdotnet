@@ -801,4 +801,201 @@ public class BenchmarkWorkspaceTest : Test
         TestOutput.WriteLine($"Results path: {resultsPath}");
         TestOutput.WriteLine($"Tuning path: {tuningPath}");
     }
+
+    [Fact]
+    public void LoadBenchmarkAssemblies_ShouldSkipEmptyFileName_WhenDllHasNoStem()
+    {
+        // Arrange – place a file whose stem is empty so that Path.GetFileNameWithoutExtension returns ""
+        // which exercises the IsNullOrEmpty(simpleName) guard in UpdateAssemblyLookup (lines 169-170).
+        var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        var buildConfig = IsDebugBuild ? "Debug" : "Release";
+        try
+        {
+            Directory.CreateDirectory(tempPath);
+            var tuningDir = Path.Combine(tempPath, "tuning");
+            var buildDir = Path.Combine(tuningDir, "bin", buildConfig, "net10.0");
+            Directory.CreateDirectory(buildDir);
+
+            // A file named ".dll" has an empty stem – Path.GetFileNameWithoutExtension(".dll") == ""
+            File.WriteAllText(Path.Combine(buildDir, ".dll"), "not-an-assembly");
+
+            var options = new BenchmarkWorkspaceOptions
+            {
+                RepositoryPath = tempPath,
+                RepositoryTuningFolder = "tuning",
+                BenchmarkProjectSuffix = "Benchmarks",
+                TargetFrameworkMoniker = "net10.0",
+                AllowDebugBuild = IsDebugBuild
+            };
+            var workspace = new BenchmarkWorkspace(options);
+
+            // Act – will throw because there are no real assemblies; that's expected
+            var exception = Record.Exception(() => workspace.LoadBenchmarkAssemblies());
+
+            // Assert – the important thing is that no unhandled exception from UpdateAssemblyLookup occurred
+            Assert.IsType<InvalidOperationException>(exception);
+            Assert.Contains("No assemblies were loaded", exception.Message);
+
+            TestOutput.WriteLine("Empty-stem .dll file was silently skipped as expected.");
+        }
+        finally
+        {
+            if (Directory.Exists(tempPath))
+            {
+                Directory.Delete(tempPath, true);
+            }
+        }
+    }
+
+    [Fact]
+    public void PostProcessArtifacts_ShouldSkipBenchmarkRunFiles_WhenResultsDirContainsThem()
+    {
+        // Arrange
+        var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        try
+        {
+            Directory.CreateDirectory(tempPath);
+            var artifactsPath = Path.Combine(tempPath, "artifacts");
+            var resultsDir = Path.Combine(artifactsPath, "results");
+            var tuningDir = Path.Combine(artifactsPath, "tuning");
+
+            Directory.CreateDirectory(resultsDir);
+
+            // BenchmarkRun-prefixed files should NOT be moved
+            File.WriteAllText(Path.Combine(resultsDir, "BenchmarkRun-20240101-120000.log"), "run log");
+            // Regular report files SHOULD be moved
+            File.WriteAllText(Path.Combine(resultsDir, "MyBenchmark-report.md"), "report");
+
+            var config = ManualConfig.CreateEmpty().WithArtifactsPath(artifactsPath);
+            var options = new BenchmarkWorkspaceOptions
+            {
+                RepositoryPath = tempPath,
+                Configuration = config,
+                RepositoryTuningFolder = "tuning"
+            };
+            var workspace = new BenchmarkWorkspace(options);
+
+            // Act
+            workspace.PostProcessArtifacts();
+
+            // Assert – the report file was moved but the BenchmarkRun log was NOT
+            Assert.False(Directory.Exists(resultsDir), "results directory should be deleted");
+            Assert.True(File.Exists(Path.Combine(tuningDir, "MyBenchmark-report.md")));
+            Assert.False(File.Exists(Path.Combine(tuningDir, "BenchmarkRun-20240101-120000.log")));
+
+            TestOutput.WriteLine("BenchmarkRun files correctly excluded from PostProcessArtifacts move.");
+        }
+        finally
+        {
+            if (Directory.Exists(tempPath))
+            {
+                Directory.Delete(tempPath, true);
+            }
+        }
+    }
+
+    [Fact]
+    public void LoadBenchmarkAssemblies_ShouldSkipDuplicateAssembly_WhenSameIdentityAppearsAtTwoPaths()
+    {
+            // This test exercises lines 141-142 (the duplicate-assembly-in-queue guard):
+            //
+            //   if (assemblies.Any(a => AssemblyName.ReferenceMatchesDefinition(a.GetName(), candidateName)))
+            //   {
+            //       continue;  // ← lines 141-142
+            //   }
+            //
+            // The guard fires when:
+            //  1. 'alreadyLoaded' (snapshot taken BEFORE the loop) does NOT contain the assembly,
+            //  2. the loop adds path1 of the assembly to 'assemblies',
+            //  3. the loop then encounters path2 with the SAME identity –
+            //     'alreadyLoaded' still has no entry (same snapshot), so the first `if` is skipped,
+            //     but `assemblies.Any(...)` is TRUE → duplicate guard fires.
+            //
+            // To guarantee the assembly is never in the initial AppDomain snapshot we generate a
+            // brand-new assembly with a unique GUID-based name via PersistedAssemblyBuilder.
+
+            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            var buildConfig = IsDebugBuild ? "Debug" : "Release";
+            try
+            {
+                // Create two subdirectories that both match the build segment
+                var proj1Dir = Path.Combine(tempPath, "tuning", "proj1", "bin", buildConfig, "net10.0");
+                var proj2Dir = Path.Combine(tempPath, "tuning", "proj2", "bin", buildConfig, "net10.0");
+                Directory.CreateDirectory(proj1Dir);
+                Directory.CreateDirectory(proj2Dir);
+
+                // Build a minimal in-memory assembly with a guaranteed-unique name
+                var uniqueId = Guid.NewGuid().ToString("N");
+                var asmName = new AssemblyName($"Unique{uniqueId}.Benchmarks") { Version = new Version(1, 0, 0, 0) };
+
+                var persistedBuilder = new System.Reflection.Emit.PersistedAssemblyBuilder(asmName, typeof(object).Assembly);
+                persistedBuilder.DefineDynamicModule("main")
+                    .DefineType("Placeholder", System.Reflection.TypeAttributes.Public | System.Reflection.TypeAttributes.Class)
+                    .CreateType();
+
+                // Save to path1, then copy to path2 so both carry the SAME assembly identity
+                var fileName = $"Unique{uniqueId}.Benchmarks.dll";
+                var path1 = Path.Combine(proj1Dir, fileName);
+                var path2 = Path.Combine(proj2Dir, fileName);
+                persistedBuilder.Save(path1);
+                File.Copy(path1, path2);
+
+                var options = new BenchmarkWorkspaceOptions
+                {
+                    RepositoryPath = tempPath,
+                    RepositoryTuningFolder = "tuning",
+                    BenchmarkProjectSuffix = "Benchmarks",
+                    TargetFrameworkMoniker = "net10.0",
+                    AllowDebugBuild = IsDebugBuild
+                };
+                var workspace = new BenchmarkWorkspace(options);
+
+                // Act – both paths match, one is loaded, the second hits the duplicate guard
+                var assemblies = workspace.LoadBenchmarkAssemblies();
+
+                // Assert – only ONE assembly loaded despite two matching paths
+                Assert.NotNull(assemblies);
+                Assert.Equal(1, assemblies.Length);
+                Assert.Contains(assemblies, a => a.GetName().Name == asmName.Name);
+
+                TestOutput.WriteLine($"Loaded {assemblies.Length} assembly (duplicate suppressed): {assemblies[0].GetName().Name}");
+            }
+            finally
+            {
+                // Unload assemblies and release file locks before cleanup on Windows
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+
+                // On Windows, loaded DLLs may still hold locks; retry deletion with delay
+                if (Directory.Exists(tempPath))
+                {
+                    const int maxRetries = 5;
+                    const int delayMs = 200;
+                    var lastException = (Exception)null;
+                    for (int i = 0; i < maxRetries; i++)
+                    {
+                        try
+                        {
+                            Directory.Delete(tempPath, true);
+                            break;
+                        }
+                        catch (UnauthorizedAccessException ex)
+                        {
+                            lastException = ex;
+                            if (i < maxRetries - 1)
+                            {
+                                System.Threading.Thread.Sleep(delayMs);
+                            }
+                        }
+                    }
+                    // If we still can't delete after retries, log but don't fail the test
+                    // The OS will clean up the temp directory eventually
+                    if (Directory.Exists(tempPath))
+                    {
+                        TestOutput.WriteLine($"Warning: Could not delete temp directory {tempPath}");
+                    }
+                }
+            }
+    }
 }
