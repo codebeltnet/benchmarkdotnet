@@ -2,7 +2,6 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using Cuemon;
 using Cuemon.Reflection;
-using System;
 using System.Reflection;
 
 namespace Codebelt.Extensions.BenchmarkDotNet.Console;
