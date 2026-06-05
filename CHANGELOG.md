@@ -4,9 +4,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [1.2.8] - 2026-06-05
+## [1.3.0] - 2026-06-05
 
-This is a service update that focuses on package dependencies.
+This is a minor release focused on code organization improvements, test coverage expansion, CI/CD pipeline hardening, and comprehensive agent guidance. The release refactors target framework parsing logic for better testability, expands the test suite for core workspace classes, extends CI/CD support to macOS environments, and establishes clear conventions and standards for AI agent collaboration in the repository.
+
+### Added
+
+- Comprehensive agent guidance document (AGENTS.md) for AI agents working in the repository, covering project overview, coding standards, project structure, test conventions, and CI/CD practices,
+- Local-only `.bot/` folder for agent ideation, product requirement documents, design proposals, and agentic loop state,
+- Code coverage standards to agent guidance establishing that `ExcludeFromCodeCoverage` attribute must not be used; unmeasurable code paths should be refactored or removed,
+- macOS test matrix to CI/CD pipeline with conditional execution for platform-specific testing,
+- Extracted `ParseTargetFrameworkMoniker` method in `BenchmarkWorkspaceOptions` class for improved code organization and testability,
+- Expanded test coverage for `BenchmarkWorkspaceOptions`, `BenchmarkProgram`, and `ServiceCollectionExtensions` classes.
+
+### Changed
+
+- `BenchmarkProgram` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace was significantly enhanced with comprehensive async support including `RunAsync()` method overloads (both generic and non-generic variants) for asynchronous benchmark execution,
+- Refactored target framework moniker parsing logic in `BenchmarkWorkspaceOptions` for better separation of concerns and improved testability,
+- Upgraded `Microsoft.NET.Test.Sdk` from 18.5.1 to 18.6.0,
+- Improved CI/CD pipeline configuration with more robust conditional execution logic,
+- Updated documentation API references in Console namespace.
 
 ## [1.2.7] - 2026-05-22
 
@@ -91,7 +108,10 @@ This is the initial stable release of the `Codebelt.Extensions.BenchmarkDotNet` 
 - ADDED `BenchmarkProgram` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that provides the main entry point for hosting and running benchmarks using BenchmarkDotNet,
 - ADDED `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that is responsible for executing benchmarks within the console host.
 
-[Unreleased]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.5...HEAD
+[Unreleased]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.7...v1.3.0
+[1.2.7]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.6...v1.2.7
+[1.2.6]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.5...v1.2.6
 [1.2.5]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.2...v1.2.3
