@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [1.3.1] - 2026-06-25
+
+This is a service update that focuses on package dependencies.
+
 ## [1.3.0] - 2026-06-05
 
 This is a minor release focused on code organization improvements, test coverage expansion, CI/CD pipeline hardening, and comprehensive agent guidance. The release refactors target framework parsing logic for better testability, expands the test suite for core workspace classes, extends CI/CD support to macOS environments, and establishes clear conventions and standards for AI agent collaboration in the repository.
