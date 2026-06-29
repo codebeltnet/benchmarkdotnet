@@ -4,6 +4,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [1.3.1] - 2026-06-29
+
+This is a patch release focused on documentation infrastructure improvements, CI/CD pipeline hardening, and keeping dependencies current.
+
+### Added
+
+- Type-level DocFX documentation files (`.docfx/api/types/`) for all public types including `BenchmarkWorkspace`, `BenchmarkWorkspaceOptions`, `BenchmarkWorkspaceOptionsExtensions`, `BenchmarkContext`, `BenchmarkProgram`, and `ServiceCollectionExtensions`, with copy/paste-ready usage examples for each type,
+- Comprehensive DocFX documentation maintenance guidelines in AGENTS.md covering documentation standards, public API documentation requirements, compilation validation, availability documentation, and documentation artifact management.
+
+### Changed
+
+- DocFX configuration updated to properly segregate and manage namespace-level and type-level overwrite files, preventing documentation duplication and improving build clarity,
+- CI/CD deployment condition improved to use explicit job result checking with `always()` to ensure that skipped optional jobs (such as disabled macOS matrix runs) do not suppress deployment,
+- Upgraded `Microsoft.NET.Test.Sdk` from 18.6.0 to 18.7.0,
+- Updated Dockerfile configuration for DocFX builds.
+
 ## [1.3.0] - 2026-06-05
 
 This is a minor release focused on code organization improvements, test coverage expansion, CI/CD pipeline hardening, and comprehensive agent guidance. The release refactors target framework parsing logic for better testability, expands the test suite for core workspace classes, extends CI/CD support to macOS environments, and establishes clear conventions and standards for AI agent collaboration in the repository.
@@ -108,7 +124,8 @@ This is the initial stable release of the `Codebelt.Extensions.BenchmarkDotNet` 
 - ADDED `BenchmarkProgram` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that provides the main entry point for hosting and running benchmarks using BenchmarkDotNet,
 - ADDED `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that is responsible for executing benchmarks within the console host.
 
-[Unreleased]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.7...v1.3.0
 [1.2.7]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.6...v1.2.7
 [1.2.6]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.5...v1.2.6
