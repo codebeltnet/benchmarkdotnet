@@ -59,12 +59,6 @@ Agents must never automatically commit code changes or push to remote repositori
 
 **Rationale:** Automatic commits can clutter history with incomplete work, temporary debugging code, or unintended changes. Unexpected remote operations risk overwriting or losing commits on shared branches. Always require explicit user approval before performing these actions.
 
-## Official Documentation
-
-- Public API conventions belong in `.docfx/api/namespaces/` and should be treated as the official documentation source for library behavior and naming vocabulary.
-- When adding or renaming public APIs, update the relevant namespace page in `.docfx/api/namespaces/` if the change introduces or clarifies a convention.
-- Keep internal reasoning, exploratory notes, and agent discussion out of DocFX pages; summarize only stable public guidance.
-
 <!-- dotnet-docfx-digest:start -->
 ## DocFX Documentation Maintenance
 

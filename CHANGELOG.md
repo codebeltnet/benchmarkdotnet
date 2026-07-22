@@ -4,6 +4,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [1.3.2] - 2026-07-22
+
+This is a patch release focused on dependency updates, build configuration corrections, and infrastructure refinements.
+
+### Changed
+
+- Upgraded `Codebelt.Bootstrapper.Console` from 5.1.1 to 5.1.2,
+- Upgraded `Codebelt.Extensions.Xunit.App` from 11.1.1 to 11.1.2,
+- Upgraded `Cuemon.Core` from 10.5.4 to 10.5.5,
+- Upgraded `Microsoft.NET.Test.Sdk` from 18.7.0 to 18.8.1,
+- Updated nginx base image in DocFX dockerfile from 1.31.2-alpine to 1.31-alpine for stability tracking,
+- Consolidated DocFX documentation guidance in AGENTS.md under the dotnet-docfx-digest block.
+
+### Fixed
+
+- Corrected MSBuild property name from `AnalysisLevel` to `AnalysisMode` in benchmark and test project configurations to properly control code analysis behavior.
+
 ## [1.3.1] - 2026-06-29
 
 This is a patch release focused on documentation infrastructure improvements, CI/CD pipeline hardening, and keeping dependencies current.
@@ -124,7 +141,8 @@ This is the initial stable release of the `Codebelt.Extensions.BenchmarkDotNet` 
 - ADDED `BenchmarkProgram` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that provides the main entry point for hosting and running benchmarks using BenchmarkDotNet,
 - ADDED `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that is responsible for executing benchmarks within the console host.
 
-[Unreleased]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.7...v1.3.0
 [1.2.7]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.2.6...v1.2.7
