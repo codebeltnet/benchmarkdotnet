@@ -4,6 +4,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [1.3.4] - 2026-09-12
+
+This is a patch release focused on dependency upgrades, code coverage infrastructure modernization, and developer experience improvements through enhanced tooling and documentation.
+
+### Added
+
+- `.editorconfig` file to enforce code formatting standards and analyzer severity rules across the repository,
+- `.gitattributes` file to configure Git line ending behavior and merge strategy for consistent checkout across platforms,
+- `global.json` to pin .NET SDK version and configure Microsoft.Testing.Platform as the test runner,
+- Comprehensive developer documentation in `.github/CONTRIBUTING.md` with detailed local development setup, build commands, test procedures, and package workflow.
+
+### Changed
+
+- Replaced coverlet code coverage tooling with Microsoft.Testing.Extensions.CodeCoverage for improved integration with xUnit v3 and Microsoft Testing Platform,
+- Upgraded Codebelt.Bootstrapper.Console from 5.2.0 to 5.2.1,
+- Upgraded Codebelt.Extensions.Xunit.App from 11.2.1 to 12.0.1,
+- Upgraded Cuemon.Core from 10.7.0 to 10.7.1,
+- Upgraded Microsoft.NET.Test.Sdk from 18.9.0 to 18.10.0,
+- Upgraded MinVer from 7.0.0 to 8.0.0,
+- Upgraded xUnit v3 from 3.2.2 to 4.0.0 (including xunit.v3.runner.console and xunit.runner.visualstudio),
+- Restructured `.github/CONTRIBUTING.md` with step-by-step development instructions, testing procedures, and package documentation workflow.
+
 ## [1.3.3] - 2026-08-15
 
 This is a patch release focused on dependency upgrades and test infrastructure consolidation to improve compatibility and reduce maintenance overhead.
@@ -154,6 +176,7 @@ This is the initial stable release of the `Codebelt.Extensions.BenchmarkDotNet` 
 - ADDED `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that is responsible for executing benchmarks within the console host.
 
 [Unreleased]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.3...HEAD
+[1.3.4]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.3...HEAD
 [1.3.3]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.0...v1.3.1
