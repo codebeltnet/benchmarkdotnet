@@ -4,6 +4,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [1.3.5] - 2026-10-17
+
+This is a patch release that updates dependencies, consolidates agent guidance and revises documentation hosting.
+
+### Added
+
+- Added `nginx.conf` for port 8080, immutable caching of fingerprinted public assets and disabled caching and validators for stable documentation URLs.
+
+### Changed
+
+- Updated `Cuemon.Core` from 10.7.1 to 10.8.1,
+- Updated `Codebelt.Extensions.Xunit.App` from 12.0.1 to 12.0.2,
+- Updated `Microsoft.NET.Test.Sdk` from 18.10.0 to 18.11.0,
+- Replaced `Microsoft.Testing.Extensions.CodeCoverage` with `Codebelt.Coverlet.MTP` 10.1.0 and added `Microsoft.Testing.Extensions.HangDump` 2.5.1,
+- Updated `xunit.runner.visualstudio` from 4.0.0 to 4.0.1,
+- Updated `xunit.v3`, `xunit.v3.runner.console` from 4.0.0 to 4.0.2,
+- Updated `Codebelt.Bootstrapper.Console` from 5.2.1 to 5.2.2,
+- Consolidated the complete test, benchmark and XML documentation guidance in `AGENTS.md`, preserving examples and path scopes and updating guidance links,
+- Configured DocFX for separate member pages, the `templates/ms-style` template and a monthly sitemap; switched documentation containers to `dhi.io/nginx` and the `codebeltnet/docfx:2` builder.
+
 ## [1.3.4] - 2026-09-12
 
 This is a patch release focused on dependency upgrades, code coverage infrastructure modernization, and developer experience improvements through enhanced tooling and documentation.
@@ -175,8 +195,8 @@ This is the initial stable release of the `Codebelt.Extensions.BenchmarkDotNet` 
 - ADDED `BenchmarkProgram` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that provides the main entry point for hosting and running benchmarks using BenchmarkDotNet,
 - ADDED `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that is responsible for executing benchmarks within the console host.
 
-[Unreleased]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.3...HEAD
-[1.3.4]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.3...HEAD
+[1.3.5]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.4...v1.3.5
+[1.3.4]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.3...v1.3.4
 [1.3.3]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.0...v1.3.1
