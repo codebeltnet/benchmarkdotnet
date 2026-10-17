@@ -17,7 +17,7 @@ This is a patch release that updates dependencies, consolidates agent guidance a
 - Updated `Cuemon.Core` from 10.7.1 to 10.8.1,
 - Updated `Codebelt.Extensions.Xunit.App` from 12.0.1 to 12.0.2,
 - Updated `Microsoft.NET.Test.Sdk` from 18.10.0 to 18.11.0,
-- Updated `Microsoft.Testing.Extensions.CodeCoverage` from 18.11.2 to 18.12.0,
+- Replaced `Microsoft.Testing.Extensions.CodeCoverage` with `Codebelt.Coverlet.MTP` 10.1.0 and added `Microsoft.Testing.Extensions.HangDump` 2.5.1,
 - Updated `xunit.runner.visualstudio` from 4.0.0 to 4.0.1,
 - Updated `xunit.v3`, `xunit.v3.runner.console` from 4.0.0 to 4.0.2,
 - Updated `Codebelt.Bootstrapper.Console` from 5.2.1 to 5.2.2,
