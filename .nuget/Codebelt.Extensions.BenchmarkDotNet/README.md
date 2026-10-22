@@ -6,7 +6,7 @@ A unified, opinionated foundation for building robust BenchmarkDotNet workflows 
 
 **Codebelt.Extensions.BenchmarkDotNet** is part of a modern, MIT-licensed ecosystem designed to bring clarity, structure, and consistency to BenchmarkDotNet projects.
 
-If you value predictable conventions, clean separation of responsibilities, and benchmarks that scale gracefully across `.NET 9` and `.NET 10`, this library is your agile companion.
+If you value predictable conventions, clean separation of responsibilities, and benchmarks that scale gracefully across `.NET 11` (`net11.0`) and `.NET 10` (`net10.0`), this library is your agile companion.
 
 It removes unnecessary ceremony while embracing best practices from other consumers of BenchmarkDotNet, so you can focus on performance insights, not plumbing.
 
