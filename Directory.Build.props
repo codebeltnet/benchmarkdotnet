@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsSourceProject)' == 'true'">
-    <TargetFrameworks>net10.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net11.0;net10.0</TargetFrameworks>
     <Copyright>Copyright © Geekle 2025-2026. All rights reserved.</Copyright>
     <Authors>gimlichael</Authors>
     <Company>Geekle</Company>
@@ -56,7 +56,7 @@
   </ItemGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <TargetFrameworks>net10.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net11.0;net10.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <OutputType>Exe</OutputType>
     <RunAnalyzers>false</RunAnalyzers>
@@ -94,7 +94,7 @@
   </ItemGroup>
 
   <PropertyGroup Condition="'$(IsBenchmarkProject)' == 'true'">
-    <TargetFrameworks>net10.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net11.0;net10.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <RunAnalyzers>false</RunAnalyzers>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>

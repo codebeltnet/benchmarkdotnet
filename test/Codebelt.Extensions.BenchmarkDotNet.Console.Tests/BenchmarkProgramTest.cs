@@ -69,11 +69,11 @@ public class BenchmarkProgramTest : Test
         var buildConfiguration = BenchmarkProgram.BuildConfiguration;
 
         // Assert
-        #if DEBUG
+#if DEBUG
         Assert.Equal("Debug", buildConfiguration);
-        #else
+#else
         Assert.Equal("Release", buildConfiguration);
-        #endif
+#endif
 
         TestOutput.WriteLine($"BuildConfiguration: {buildConfiguration}");
     }
@@ -101,11 +101,11 @@ public class BenchmarkProgramTest : Test
         var isDebugBuild = BenchmarkProgram.IsDebugBuild;
 
         // Assert
-        #if DEBUG
+#if DEBUG
         Assert.True(isDebugBuild);
-        #else
+#else
         Assert.False(isDebugBuild);
-        #endif
+#endif
 
         TestOutput.WriteLine($"IsDebugBuild: {isDebugBuild}");
     }
@@ -147,7 +147,7 @@ public class BenchmarkProgramTest : Test
         // Act & Assert - Static constructor should have already run
         Assert.NotNull(BenchmarkProgram.BuildConfiguration);
         Assert.NotEmpty(BenchmarkProgram.BuildConfiguration);
-        
+
         // IsDebugBuild can be true or false, but should be set
         var isDebugBuild = BenchmarkProgram.IsDebugBuild;
         Assert.True(isDebugBuild == true || isDebugBuild == false);
@@ -227,7 +227,7 @@ public class BenchmarkProgramTest : Test
 
         // Assert
         Assert.NotNull(buildConfiguration);
-        
+
         if (isDebugBuild)
         {
             Assert.Equal("Debug", buildConfiguration);
@@ -310,8 +310,8 @@ public class BenchmarkProgramTest : Test
     {
         // Act
         var method = typeof(BenchmarkProgram).GetMethods(BindingFlags.Public | BindingFlags.Static)
-            .FirstOrDefault(m => 
-                m.Name == "Run" && 
+            .FirstOrDefault(m =>
+                m.Name == "Run" &&
                 m.IsGenericMethodDefinition &&
                 m.GetParameters().Length == 2);
 
@@ -333,8 +333,8 @@ public class BenchmarkProgramTest : Test
     {
         // Act
         var method = typeof(BenchmarkProgram).GetMethods(BindingFlags.Public | BindingFlags.Static)
-            .FirstOrDefault(m => 
-                m.Name == "Run" && 
+            .FirstOrDefault(m =>
+                m.Name == "Run" &&
                 m.IsGenericMethodDefinition &&
                 m.GetParameters().Length == 2);
 
@@ -451,7 +451,7 @@ public class BenchmarkProgramTest : Test
 
         // Assert
         Assert.NotNull(nonGenericMethod);
-        
+
         var parameters = nonGenericMethod.GetParameters();
         Assert.Equal(2, parameters.Length);
         Assert.Equal("args", parameters[0].Name);
@@ -474,7 +474,7 @@ public class BenchmarkProgramTest : Test
 
         // Assert
         Assert.NotNull(nonGenericMethod);
-        
+
         var setupParameter = nonGenericMethod.GetParameters()[1];
         Assert.True(setupParameter.IsOptional);
         Assert.Null(setupParameter.DefaultValue);

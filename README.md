@@ -6,7 +6,7 @@
 
 An open-source project (MIT license) that targets and complements the [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) performance library. It provides a uniform and convenient way of doing benchmarking for all project types in .NET.
 
-Your versatile BenchmarkDotNet companion for modern development with `.NET 9` and `.NET 10`.
+Your versatile BenchmarkDotNet companion for modern development with `.NET 10` and `.NET 11`.
 
 It is, by heart, free, flexible and built to extend and boost your agile codebelt.
 
@@ -60,6 +60,7 @@ Benchmarks are executed through a console-hosted Generic Host, allowing full par
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Jobs;
+using Codebelt.Extensions.BenchmarkDotNet;
 using Codebelt.Extensions.BenchmarkDotNet.Console;
 
 public class Program
@@ -72,8 +73,8 @@ public class Program
             o.ConfigureBenchmarkDotNet(c =>
             {
                 var slimJob = BenchmarkWorkspaceOptions.Slim;
-                return c.AddJob(slimJob.WithRuntime(CoreRuntime.Core90))
-                    .AddJob(slimJob.WithRuntime(CoreRuntime.Core10_0));
+                return c.AddJob(slimJob.WithRuntime(CoreRuntime.Core10_0))
+                    .AddJob(slimJob.WithRuntime(CoreRuntime.CreateForNewVersion("net11.0", ".NET 11.0")));
             });
         });
     }

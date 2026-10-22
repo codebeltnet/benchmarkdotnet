@@ -4,7 +4,7 @@ This document provides guidance for AI agents working in this repository.
 
 ## Project Overview
 
-Codebelt.Extensions.BenchmarkDotNet is a .NET library that provides a uniform, opinionated, and extensible way of working with BenchmarkDotNet. The solution targets .NET 10.0 and .NET 9.0.
+Codebelt.Extensions.BenchmarkDotNet is a .NET library that provides a uniform, opinionated, and extensible way of working with BenchmarkDotNet. The solution targets .NET 11.0 and .NET 10.0.
 
 ## Coding Standards
 
