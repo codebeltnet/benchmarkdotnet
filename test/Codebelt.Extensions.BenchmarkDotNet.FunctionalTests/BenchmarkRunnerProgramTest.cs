@@ -42,8 +42,9 @@ public class BenchmarkRunnerProgramTest : Test
 
         Assert.Equal(BenchmarkProgram.IsDebugBuild, options.AllowDebugBuild);
         Assert.True(options.SkipBenchmarksWithReports);
-        Assert.Contains(jobs, job => job.Environment.Runtime == CoreRuntime.Core90);
+        Assert.DoesNotContain(jobs, job => job.Environment.Runtime == CoreRuntime.Core90);
         Assert.Contains(jobs, job => job.Environment.Runtime == CoreRuntime.Core10_0);
+        Assert.Contains(jobs, job => job.Environment.Runtime?.MsBuildMoniker == "net11.0");
     }
 }
 #endif

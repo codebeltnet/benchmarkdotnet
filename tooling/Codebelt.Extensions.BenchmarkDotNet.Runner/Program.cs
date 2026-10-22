@@ -16,8 +16,8 @@ public class Program
             o.ConfigureBenchmarkDotNet(c =>
             {
                 var slimJob = BenchmarkWorkspaceOptions.Slim;
-                return c.AddJob(slimJob.WithRuntime(CoreRuntime.Core90))
-                    .AddJob(slimJob.WithRuntime(CoreRuntime.Core10_0));
+                return c.AddJob(slimJob.WithRuntime(CoreRuntime.Core10_0))
+                    .AddJob(slimJob.WithRuntime(CoreRuntime.CreateForNewVersion("net11.0", ".NET 11.0")));
             });
         });
     }

@@ -31,7 +31,7 @@ public class BenchmarkWorkspaceBenchmark
         var tuningDir = Path.Combine(options.RepositoryPath, "tuning");
 
         CreateBenchmarkAssembly(tuningDir, buildConfig, "net10.0", "Valid.Benchmarks.dll");
-        CreateBenchmarkAssembly(tuningDir, buildConfig, "net9.0", "Valid.Benchmarks.dll");
+        CreateBenchmarkAssembly(tuningDir, buildConfig, "net11.0", "Valid.Benchmarks.dll");
     }
 
     [Benchmark(Baseline = true, Description = "Construct BenchmarkDotNetWorkspace")]
@@ -60,7 +60,7 @@ public class BenchmarkWorkspaceBenchmark
     /// </summary>
     /// <param name="tuningDir">The base tuning directory path.</param>
     /// <param name="buildConfig">The build configuration (e.g., "Debug" or "Release").</param>
-    /// <param name="targetFramework">The target framework moniker (e.g., "net9.0", "net10.0").</param>
+    /// <param name="targetFramework">The target framework moniker (e.g., "net10.0", "net11.0").</param>
     /// <param name="dllName">The name of the DLL file to create.</param>
     private void CreateBenchmarkAssembly(string tuningDir, string buildConfig, string targetFramework, string dllName)
     {
