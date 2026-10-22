@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cuemon;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -38,7 +38,7 @@ public static class ServiceCollectionExtensions
         Validator.ThrowIfInvalidConfigurator(setup, out var options);
         return services
             .AddSingleton<IBenchmarkWorkspace, TWorkspace>()
-            .Configure(setup ?? (_ => {}))
+            .Configure(setup ?? (_ => { }))
             .AddSingleton(options);
     }
 }

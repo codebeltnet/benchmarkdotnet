@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Configs;
 using Codebelt.Extensions.BenchmarkDotNet.Console;
 using Codebelt.Extensions.Xunit;
 using System;
@@ -20,7 +20,7 @@ public class BenchmarkProgramTest : Test
     public BenchmarkProgramTest(ITestOutputHelper output) : base(output)
     {
     }
-    
+
     /// <summary>
     /// Exercises the non-generic <c>Run(string[], Action&lt;BenchmarkWorkspaceOptions&gt;)</c> overload (line 54)
     /// and the non-generic <c>Run(string[], Action&lt;IServiceCollection&gt;, Action&lt;BenchmarkWorkspaceOptions&gt;)</c>

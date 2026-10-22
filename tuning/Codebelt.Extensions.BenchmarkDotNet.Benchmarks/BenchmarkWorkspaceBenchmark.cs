@@ -26,10 +26,10 @@ public class BenchmarkWorkspaceBenchmark
         _workspace = new BenchmarkWorkspace(options);
 
         var buildConfig = isDebugBuild
-            ? "Debug" 
+            ? "Debug"
             : "Release";
         var tuningDir = Path.Combine(options.RepositoryPath, "tuning");
-        
+
         CreateBenchmarkAssembly(tuningDir, buildConfig, "net10.0", "Valid.Benchmarks.dll");
         CreateBenchmarkAssembly(tuningDir, buildConfig, "net9.0", "Valid.Benchmarks.dll");
     }
