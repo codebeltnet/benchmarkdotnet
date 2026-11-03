@@ -4,6 +4,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [2.0.0] - 2026-11-10
+
+This is a major release because it removes .NET 9 (`net9.0`) as a supported target framework, so the packages now target `.NET 11` and `.NET 10`. It also updates the documentation and examples to the new target frameworks and refreshes two central build dependencies.
+
+### Added
+
+- Added `net11.0` as a target framework for the `Codebelt.Extensions.BenchmarkDotNet` and `Codebelt.Extensions.BenchmarkDotNet.Console` packages.
+
+### Changed
+
+- Updated the repository and package READMEs to describe `.NET 11` and `.NET 10` support, and changed the console example to benchmark `.NET 10` and `.NET 11` jobs instead of `.NET 9`,
+- Updated `Codebelt.Coverlet.MTP` from 10.1.0 to 10.1.1 and `Codebelt.Bootstrapper.Console` from 5.2.2 to 5.2.3 in the central package versions,
+- Reformatted the C# source files to file-scoped namespaces and removed UTF-8 byte order marks and trailing whitespace, with no behavior or API changes.
+
+### Removed
+
+- Removed `net9.0` as a target framework for the `Codebelt.Extensions.BenchmarkDotNet` and `Codebelt.Extensions.BenchmarkDotNet.Console` packages, so consumers on .NET 9 are no longer supported.
+
 ## [1.3.5] - 2026-10-17
 
 This is a patch release that updates dependencies, consolidates agent guidance and revises documentation hosting.
@@ -195,6 +213,7 @@ This is the initial stable release of the `Codebelt.Extensions.BenchmarkDotNet` 
 - ADDED `BenchmarkProgram` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that provides the main entry point for hosting and running benchmarks using BenchmarkDotNet,
 - ADDED `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that is responsible for executing benchmarks within the console host.
 
+[2.0.0]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.5...v2.0.0
 [1.3.5]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.4...v1.3.5
 [1.3.4]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.3...v1.3.4
 [1.3.3]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.2...v1.3.3
