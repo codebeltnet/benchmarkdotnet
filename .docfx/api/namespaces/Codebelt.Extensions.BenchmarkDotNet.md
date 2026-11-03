@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Codebelt.Extensions.BenchmarkDotNet
 summary: *content
 ---

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>The Codebelt.Extensions.BenchmarkDotNet.Console namespace contains types that provide a structured and opinionated console-hosted execution model for BenchmarkDotNet.</Description>

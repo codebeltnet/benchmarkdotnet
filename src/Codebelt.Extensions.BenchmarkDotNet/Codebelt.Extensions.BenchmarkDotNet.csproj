@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>The Codebelt.Extensions.BenchmarkDotNet namespace contains types that provide a uniform, opinionated, and extensible way of working with BenchmarkDotNet.</Description>
