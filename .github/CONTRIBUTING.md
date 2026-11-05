@@ -43,7 +43,7 @@ The CI test plan currently runs **4** project(s) and excludes **0** project(s). 
 
 ## Integration and infrastructure
 
-- `WSL-Ubuntu` — WSL distribution `Ubuntu-24.04`.
+- `WSL-Ubuntu` — WSL distribution `Ubuntu-26.04`.
 - `Docker-Ubuntu (net10.0)` — Docker image `codebeltnet/ubuntu-testrunner:10`.
 - `Docker-Ubuntu (net11.0)` — Docker image `codebeltnet/ubuntu-testrunner:11`.
 
