@@ -4,23 +4,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [2.0.0] - 2026-11-10
+## [2.0.0] - 2026-11-11
 
-This is a major release because it removes .NET 9 (`net9.0`) as a supported target framework, so the packages now target `.NET 11` and `.NET 10`. It also updates the documentation and examples to the new target frameworks and refreshes two central build dependencies.
+This major release adds .NET 11 support and removes the .NET 9 target from both packages. It also updates benchmark tooling, dependencies, CI, and documentation hosting.
 
 ### Added
 
-- Added `net11.0` as a target framework for the `Codebelt.Extensions.BenchmarkDotNet` and `Codebelt.Extensions.BenchmarkDotNet.Console` packages.
+- .NET 11 package and test targets for `Codebelt.Extensions.BenchmarkDotNet` and `Codebelt.Extensions.BenchmarkDotNet.Console`,
+- `SonarAnalyzer.CSharp` 10.36.0.15337 for source projects.
 
 ### Changed
 
-- Updated the repository and package READMEs to describe `.NET 11` and `.NET 10` support, and changed the console example to benchmark `.NET 10` and `.NET 11` jobs instead of `.NET 9`,
-- Updated `Codebelt.Coverlet.MTP` from 10.1.0 to 10.1.1 and `Codebelt.Bootstrapper.Console` from 5.2.2 to 5.2.3 in the central package versions,
-- Reformatted the C# source files to file-scoped namespaces and removed UTF-8 byte order marks and trailing whitespace, with no behavior or API changes.
+- Updated `Codebelt.Coverlet.MTP` from 10.1.0 to 11.0.0, `Codebelt.Extensions.Xunit.App` from 12.0.2 to 13.0.0, `Codebelt.Bootstrapper.Console` from 5.2.2 to 5.2.3, and `Cuemon.Core` from 10.8.1 to 11.0.0,
+- Updated `Microsoft.NET.Test.Sdk` from 18.11.0 to 18.12.0, `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.3, and `xunit.v3` and `xunit.v3.runner.console` from 4.0.2 to 4.0.3,
+- Updated the benchmark runner and examples to use .NET 10 and .NET 11, and converted block-scoped C# namespaces to file-scoped declarations,
+- Enabled preview SDK provisioning in CI, moved Linux CI jobs to Ubuntu 26.04, and split Docker test environments by .NET 10 and .NET 11,
+- Updated the Scorecard action pins and schedule and removed its branch-protection-rule trigger,
+- Updated service-update version selection to use Git tags and preserve newer pending release drafts,
+- Changed documentation asset caching so successful fingerprinted assets and revalidations can be cached while errors are not cached.
 
 ### Removed
 
-- Removed `net9.0` as a target framework for the `Codebelt.Extensions.BenchmarkDotNet` and `Codebelt.Extensions.BenchmarkDotNet.Console` packages, so consumers on .NET 9 are no longer supported.
+- The .NET 9 targets from both packages and their tests; consumers must target .NET 10 or later,
+- The repository's benchmark prompt.
 
 ## [1.3.5] - 2026-10-17
 
