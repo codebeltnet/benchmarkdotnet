@@ -4,7 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [2.0.0] - 2026-11-11
+## [2.0.0] - 2026-11-12
 
 This major release adds .NET 11 support and removes the .NET 9 target from both packages. It also updates benchmark tooling, dependencies, CI, and documentation hosting.
 
@@ -17,15 +17,15 @@ This major release adds .NET 11 support and removes the .NET 9 target from both 
 
 - Updated `Codebelt.Coverlet.MTP` from 10.1.0 to 11.0.0, `Codebelt.Extensions.Xunit.App` from 12.0.2 to 13.0.0, `Codebelt.Bootstrapper.Console` from 5.2.2 to 5.2.3, and `Cuemon.Core` from 10.8.1 to 11.0.0,
 - Updated `Microsoft.NET.Test.Sdk` from 18.11.0 to 18.12.0, `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.3, and `xunit.v3` and `xunit.v3.runner.console` from 4.0.2 to 4.0.3,
-- Updated the benchmark runner and examples to use .NET 10 and .NET 11, and converted block-scoped C# namespaces to file-scoped declarations,
-- Enabled preview SDK provisioning in CI, moved Linux CI jobs to Ubuntu 26.04, and split Docker test environments by .NET 10 and .NET 11,
+- Updated the benchmark runner and examples to use .NET 10 and .NET 11, and enforced file-scoped namespaces in the repository's C# style configuration,
+- Moved Linux CI jobs and the WSL test environment to Ubuntu 26.04, and split Docker test environments by .NET 10 and .NET 11,
 - Updated the Scorecard action pins and schedule and removed its branch-protection-rule trigger,
 - Updated service-update version selection to use Git tags and preserve newer pending release drafts,
-- Changed documentation asset caching so successful fingerprinted assets and revalidations can be cached while errors are not cached.
+- Changed documentation asset caching so successful fingerprinted assets and revalidations can be cached while errors are not cached, and disabled range requests for those assets.
 
 ### Removed
 
-- The .NET 9 targets from both packages and their tests; consumers must target .NET 10 or later,
+- The .NET 9 targets from both packages, their tests, and benchmark projects; the packages now target .NET 10 and .NET 11,
 - The repository's benchmark prompt.
 
 ## [1.3.5] - 2026-10-17
