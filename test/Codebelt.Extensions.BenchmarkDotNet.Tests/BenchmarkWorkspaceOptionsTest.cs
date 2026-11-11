@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Configs;
 using Codebelt.Extensions.Xunit;
 using System;
 using System.IO;
@@ -511,7 +511,7 @@ public class BenchmarkWorkspaceOptionsTest : Test
         // Arrange
         var existingPath = @"C:\ExistingArtifacts";
         var options = new BenchmarkWorkspaceOptions();
-        
+
         if (options.Configuration is ManualConfig manual)
         {
             manual.ArtifactsPath = existingPath;
@@ -535,7 +535,7 @@ public class BenchmarkWorkspaceOptionsTest : Test
         var options = new BenchmarkWorkspaceOptions();
         var testRepoPath = @"C:\TestRepo";
         var testReportsFolder = "reports";
-        
+
         // Create a non-ManualConfig by using WithArtifactsPath on DefaultConfig
         options.Configuration = ManualConfig.CreateEmpty().WithArtifactsPath("");
         options.RepositoryPath = testRepoPath;

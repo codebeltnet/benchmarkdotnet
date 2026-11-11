@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Configs;
 using Codebelt.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using System;

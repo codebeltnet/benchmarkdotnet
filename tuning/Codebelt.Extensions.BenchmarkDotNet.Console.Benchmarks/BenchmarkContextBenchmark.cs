@@ -20,7 +20,7 @@ public class BenchmarkContextBenchmark
     {
         // Deterministic initialization of test data
         _emptyArgs = [];
-        
+
         _smallArgs = new string[8];
         for (int i = 0; i < _smallArgs.Length; i++)
         {

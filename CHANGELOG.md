@@ -4,6 +4,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [2.0.0] - 2026-11-12
+
+This major release adds .NET 11 support and removes the .NET 9 target from both packages. It also updates benchmark tooling, dependencies, CI, and documentation hosting.
+
+### Added
+
+- .NET 11 package and test targets for `Codebelt.Extensions.BenchmarkDotNet` and `Codebelt.Extensions.BenchmarkDotNet.Console`,
+- `SonarAnalyzer.CSharp` 10.36.0.15337 for source projects.
+
+### Changed
+
+- Updated `Codebelt.Coverlet.MTP` from 10.1.0 to 11.0.0, `Codebelt.Extensions.Xunit.App` from 12.0.2 to 13.0.0, `Codebelt.Bootstrapper.Console` from 5.2.2 to 5.2.3, and `Cuemon.Core` from 10.8.1 to 11.0.0,
+- Updated `Microsoft.NET.Test.Sdk` from 18.11.0 to 18.12.0, `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.3, and `xunit.v3` and `xunit.v3.runner.console` from 4.0.2 to 4.0.3,
+- Updated the benchmark runner and examples to use .NET 10 and .NET 11, and enforced file-scoped namespaces in the repository's C# style configuration,
+- Moved Linux CI jobs and the WSL test environment to Ubuntu 26.04, and split Docker test environments by .NET 10 and .NET 11,
+- Updated the Scorecard action pins and schedule and removed its branch-protection-rule trigger,
+- Updated service-update version selection to use Git tags and preserve newer pending release drafts,
+- Changed documentation asset caching so successful fingerprinted assets and revalidations can be cached while errors are not cached, and disabled range requests for those assets.
+
+### Removed
+
+- The .NET 9 targets from both packages, their tests, and benchmark projects; the packages now target .NET 10 and .NET 11,
+- The repository's benchmark prompt.
+
 ## [1.3.5] - 2026-10-17
 
 This is a patch release that updates dependencies, consolidates agent guidance and revises documentation hosting.
@@ -195,6 +219,7 @@ This is the initial stable release of the `Codebelt.Extensions.BenchmarkDotNet` 
 - ADDED `BenchmarkProgram` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that provides the main entry point for hosting and running benchmarks using BenchmarkDotNet,
 - ADDED `BenchmarkWorker` class in the Codebelt.Extensions.BenchmarkDotNet.Console namespace that is responsible for executing benchmarks within the console host.
 
+[2.0.0]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.5...v2.0.0
 [1.3.5]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.4...v1.3.5
 [1.3.4]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.3...v1.3.4
 [1.3.3]: https://github.com/codebeltnet/benchmarkdotnet/compare/v1.3.2...v1.3.3

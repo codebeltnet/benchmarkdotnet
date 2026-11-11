@@ -217,7 +217,7 @@ public class BenchmarkWorkspaceTest : Test
         Assert.NotNull(assemblies);
         Assert.NotEmpty(assemblies);
         Assert.All(assemblies, assembly => Assert.NotNull(assembly));
-        
+
         TestOutput.WriteLine($"Current build configuration: {(IsDebugBuild ? "Debug" : "Release")}");
         TestOutput.WriteLine($"Loaded {assemblies.Length} benchmark assemblies:");
         foreach (var assembly in assemblies)
@@ -341,7 +341,7 @@ public class BenchmarkWorkspaceTest : Test
         Assert.NotNull(secondLoad);
         Assert.All(firstLoad, firstAssembly =>
         {
-            var matchingSecondAssembly = secondLoad.FirstOrDefault(second => 
+            var matchingSecondAssembly = secondLoad.FirstOrDefault(second =>
                 AssemblyName.ReferenceMatchesDefinition(second.GetName(), firstAssembly.GetName()));
             Assert.NotNull(matchingSecondAssembly);
         });
@@ -358,9 +358,9 @@ public class BenchmarkWorkspaceTest : Test
             var artifactsPath = Path.Combine(tempPath, "artifacts");
             var resultsDir = Path.Combine(artifactsPath, "results");
             var tuningDir = Path.Combine(artifactsPath, "tuning");
-            
+
             Directory.CreateDirectory(resultsDir);
-            
+
             var testFile1 = Path.Combine(resultsDir, "test1.txt");
             var testFile2 = Path.Combine(resultsDir, "test2.md");
             File.WriteAllText(testFile1, "Test content 1");
@@ -384,7 +384,7 @@ public class BenchmarkWorkspaceTest : Test
             Assert.True(Directory.Exists(tuningDir));
             Assert.True(File.Exists(Path.Combine(tuningDir, "test1.txt")));
             Assert.True(File.Exists(Path.Combine(tuningDir, "test2.md")));
-            
+
             TestOutput.WriteLine($"Files moved successfully to: {tuningDir}");
         }
         finally
@@ -443,13 +443,13 @@ public class BenchmarkWorkspaceTest : Test
             var artifactsPath = Path.Combine(tempPath, "artifacts");
             var resultsDir = Path.Combine(artifactsPath, "results");
             var tuningDir = Path.Combine(artifactsPath, "tuning");
-            
+
             Directory.CreateDirectory(resultsDir);
             Directory.CreateDirectory(tuningDir);
-            
+
             var sourceFile = Path.Combine(resultsDir, "test.txt");
             var targetFile = Path.Combine(tuningDir, "test.txt");
-            
+
             File.WriteAllText(sourceFile, "New content");
             File.WriteAllText(targetFile, "Old content");
 
@@ -471,7 +471,7 @@ public class BenchmarkWorkspaceTest : Test
             Assert.True(File.Exists(targetFile));
             var content = File.ReadAllText(targetFile);
             Assert.Equal("New content", content);
-            
+
             TestOutput.WriteLine($"File successfully overwritten at: {targetFile}");
         }
         finally
@@ -494,7 +494,7 @@ public class BenchmarkWorkspaceTest : Test
             var artifactsPath = Path.Combine(tempPath, "artifacts");
             var resultsDir = Path.Combine(artifactsPath, "results");
             var subDir = Path.Combine(resultsDir, "subdir");
-            
+
             Directory.CreateDirectory(subDir);
             File.WriteAllText(Path.Combine(resultsDir, "file1.txt"), "Content 1");
             File.WriteAllText(Path.Combine(subDir, "file2.txt"), "Content 2");
@@ -535,7 +535,7 @@ public class BenchmarkWorkspaceTest : Test
             Directory.CreateDirectory(tempPath);
             var artifactsPath = Path.Combine(tempPath, "artifacts");
             var resultsDir = Path.Combine(artifactsPath, "results");
-            
+
             Directory.CreateDirectory(resultsDir);
             File.WriteAllText(Path.Combine(resultsDir, "test.txt"), "Content");
 
@@ -615,7 +615,7 @@ public class BenchmarkWorkspaceTest : Test
             Assert.NotNull(assemblies);
             Assert.NotEmpty(assemblies);
             Assert.All(assemblies, assembly => Assert.NotNull(assembly));
-            
+
             TestOutput.WriteLine($"Build configuration: {buildConfig}");
             TestOutput.WriteLine($"Successfully loaded {assemblies.Length} valid assemblies while skipping invalid ones");
         }
@@ -897,105 +897,105 @@ public class BenchmarkWorkspaceTest : Test
     [Fact]
     public void LoadBenchmarkAssemblies_ShouldSkipDuplicateAssembly_WhenSameIdentityAppearsAtTwoPaths()
     {
-            // This test exercises lines 141-142 (the duplicate-assembly-in-queue guard):
-            //
-            //   if (assemblies.Any(a => AssemblyName.ReferenceMatchesDefinition(a.GetName(), candidateName)))
-            //   {
-            //       continue;  // ← lines 141-142
-            //   }
-            //
-            // The guard fires when:
-            //  1. 'alreadyLoaded' (snapshot taken BEFORE the loop) does NOT contain the assembly,
-            //  2. the loop adds path1 of the assembly to 'assemblies',
-            //  3. the loop then encounters path2 with the SAME identity –
-            //     'alreadyLoaded' still has no entry (same snapshot), so the first `if` is skipped,
-            //     but `assemblies.Any(...)` is TRUE → duplicate guard fires.
-            //
-            // To guarantee the assembly is never in the initial AppDomain snapshot we generate a
-            // brand-new assembly with a unique GUID-based name via PersistedAssemblyBuilder.
+        // This test exercises lines 141-142 (the duplicate-assembly-in-queue guard):
+        //
+        //   if (assemblies.Any(a => AssemblyName.ReferenceMatchesDefinition(a.GetName(), candidateName)))
+        //   {
+        //       continue;  // ← lines 141-142
+        //   }
+        //
+        // The guard fires when:
+        //  1. 'alreadyLoaded' (snapshot taken BEFORE the loop) does NOT contain the assembly,
+        //  2. the loop adds path1 of the assembly to 'assemblies',
+        //  3. the loop then encounters path2 with the SAME identity –
+        //     'alreadyLoaded' still has no entry (same snapshot), so the first `if` is skipped,
+        //     but `assemblies.Any(...)` is TRUE → duplicate guard fires.
+        //
+        // To guarantee the assembly is never in the initial AppDomain snapshot we generate a
+        // brand-new assembly with a unique GUID-based name via PersistedAssemblyBuilder.
 
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            var buildConfig = IsDebugBuild ? "Debug" : "Release";
-            try
+        var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        var buildConfig = IsDebugBuild ? "Debug" : "Release";
+        try
+        {
+            // Create two subdirectories that both match the build segment
+            var proj1Dir = Path.Combine(tempPath, "tuning", "proj1", "bin", buildConfig, "net10.0");
+            var proj2Dir = Path.Combine(tempPath, "tuning", "proj2", "bin", buildConfig, "net10.0");
+            Directory.CreateDirectory(proj1Dir);
+            Directory.CreateDirectory(proj2Dir);
+
+            // Build a minimal in-memory assembly with a guaranteed-unique name
+            var uniqueId = Guid.NewGuid().ToString("N");
+            var asmName = new AssemblyName($"Unique{uniqueId}.Benchmarks") { Version = new Version(1, 0, 0, 0) };
+
+            var persistedBuilder = new System.Reflection.Emit.PersistedAssemblyBuilder(asmName, typeof(object).Assembly);
+            persistedBuilder.DefineDynamicModule("main")
+                .DefineType("Placeholder", System.Reflection.TypeAttributes.Public | System.Reflection.TypeAttributes.Class)
+                .CreateType();
+
+            // Save to path1, then copy to path2 so both carry the SAME assembly identity
+            var fileName = $"Unique{uniqueId}.Benchmarks.dll";
+            var path1 = Path.Combine(proj1Dir, fileName);
+            var path2 = Path.Combine(proj2Dir, fileName);
+            persistedBuilder.Save(path1);
+            File.Copy(path1, path2);
+
+            var options = new BenchmarkWorkspaceOptions
             {
-                // Create two subdirectories that both match the build segment
-                var proj1Dir = Path.Combine(tempPath, "tuning", "proj1", "bin", buildConfig, "net10.0");
-                var proj2Dir = Path.Combine(tempPath, "tuning", "proj2", "bin", buildConfig, "net10.0");
-                Directory.CreateDirectory(proj1Dir);
-                Directory.CreateDirectory(proj2Dir);
+                RepositoryPath = tempPath,
+                RepositoryTuningFolder = "tuning",
+                BenchmarkProjectSuffix = "Benchmarks",
+                TargetFrameworkMoniker = "net10.0",
+                AllowDebugBuild = IsDebugBuild
+            };
+            var workspace = new BenchmarkWorkspace(options);
 
-                // Build a minimal in-memory assembly with a guaranteed-unique name
-                var uniqueId = Guid.NewGuid().ToString("N");
-                var asmName = new AssemblyName($"Unique{uniqueId}.Benchmarks") { Version = new Version(1, 0, 0, 0) };
+            // Act – both paths match, one is loaded, the second hits the duplicate guard
+            var assemblies = workspace.LoadBenchmarkAssemblies();
 
-                var persistedBuilder = new System.Reflection.Emit.PersistedAssemblyBuilder(asmName, typeof(object).Assembly);
-                persistedBuilder.DefineDynamicModule("main")
-                    .DefineType("Placeholder", System.Reflection.TypeAttributes.Public | System.Reflection.TypeAttributes.Class)
-                    .CreateType();
+            // Assert – only ONE assembly loaded despite two matching paths
+            Assert.NotNull(assemblies);
+            Assert.Equal(1, assemblies.Length);
+            Assert.Contains(assemblies, a => a.GetName().Name == asmName.Name);
 
-                // Save to path1, then copy to path2 so both carry the SAME assembly identity
-                var fileName = $"Unique{uniqueId}.Benchmarks.dll";
-                var path1 = Path.Combine(proj1Dir, fileName);
-                var path2 = Path.Combine(proj2Dir, fileName);
-                persistedBuilder.Save(path1);
-                File.Copy(path1, path2);
+            TestOutput.WriteLine($"Loaded {assemblies.Length} assembly (duplicate suppressed): {assemblies[0].GetName().Name}");
+        }
+        finally
+        {
+            // Unload assemblies and release file locks before cleanup on Windows
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
 
-                var options = new BenchmarkWorkspaceOptions
-                {
-                    RepositoryPath = tempPath,
-                    RepositoryTuningFolder = "tuning",
-                    BenchmarkProjectSuffix = "Benchmarks",
-                    TargetFrameworkMoniker = "net10.0",
-                    AllowDebugBuild = IsDebugBuild
-                };
-                var workspace = new BenchmarkWorkspace(options);
-
-                // Act – both paths match, one is loaded, the second hits the duplicate guard
-                var assemblies = workspace.LoadBenchmarkAssemblies();
-
-                // Assert – only ONE assembly loaded despite two matching paths
-                Assert.NotNull(assemblies);
-                Assert.Equal(1, assemblies.Length);
-                Assert.Contains(assemblies, a => a.GetName().Name == asmName.Name);
-
-                TestOutput.WriteLine($"Loaded {assemblies.Length} assembly (duplicate suppressed): {assemblies[0].GetName().Name}");
-            }
-            finally
+            // On Windows, loaded DLLs may still hold locks; retry deletion with delay
+            if (Directory.Exists(tempPath))
             {
-                // Unload assemblies and release file locks before cleanup on Windows
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
-
-                // On Windows, loaded DLLs may still hold locks; retry deletion with delay
-                if (Directory.Exists(tempPath))
+                const int maxRetries = 5;
+                const int delayMs = 200;
+                var lastException = (Exception)null;
+                for (int i = 0; i < maxRetries; i++)
                 {
-                    const int maxRetries = 5;
-                    const int delayMs = 200;
-                    var lastException = (Exception)null;
-                    for (int i = 0; i < maxRetries; i++)
+                    try
                     {
-                        try
-                        {
-                            Directory.Delete(tempPath, true);
-                            break;
-                        }
-                        catch (UnauthorizedAccessException ex)
-                        {
-                            lastException = ex;
-                            if (i < maxRetries - 1)
-                            {
-                                System.Threading.Thread.Sleep(delayMs);
-                            }
-                        }
+                        Directory.Delete(tempPath, true);
+                        break;
                     }
-                    // If we still can't delete after retries, log but don't fail the test
-                    // The OS will clean up the temp directory eventually
-                    if (Directory.Exists(tempPath))
+                    catch (UnauthorizedAccessException ex)
                     {
-                        TestOutput.WriteLine($"Warning: Could not delete temp directory {tempPath}");
+                        lastException = ex;
+                        if (i < maxRetries - 1)
+                        {
+                            System.Threading.Thread.Sleep(delayMs);
+                        }
                     }
                 }
+                // If we still can't delete after retries, log but don't fail the test
+                // The OS will clean up the temp directory eventually
+                if (Directory.Exists(tempPath))
+                {
+                    TestOutput.WriteLine($"Warning: Could not delete temp directory {tempPath}");
+                }
             }
+        }
     }
 }

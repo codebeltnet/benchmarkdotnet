@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Columns;
+using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Exporters;
@@ -149,7 +149,7 @@ public class BenchmarkWorkspaceOptions : IValidatableParameterObject, IPostConfi
     /// <c>true</c> to allow Debug builds for benchmarks; otherwise, <c>false</c>. Default is <c>false</c>.
     /// </value>
     public bool AllowDebugBuild { get; set; }
-    
+
     /// <summary>
     /// Gets or sets a value indicating whether benchmarks that already have generated reports should be skipped during execution.
     /// </summary>

@@ -5,7 +5,7 @@ This repository is part of the Codebelt .NET library estate. The instructions be
 ## Before you start
 
 - Read the repository `README.md` and open an issue before starting a non-trivial feature or behavioral change.
-- Use an installed .NET SDK that can build the target frameworks listed below. This repository currently targets: **net10.0, net9.0**.
+- Use an installed .NET SDK that can build the target frameworks listed below. This repository currently targets: **net10.0, net11.0**.
 - The solution is `Codebelt.Extensions.BenchmarkDotNet.slnx`. Central package versions are maintained in `Directory.Packages.props`.
 - The shared build behavior is in `Directory.Build.props` and `Directory.Build.targets`; repository-specific TFMs, package references and metadata remain local to this library.
 
@@ -15,7 +15,7 @@ This repository is part of the Codebelt .NET library estate. The instructions be
 - `test/` contains xUnit v3 test projects.
 - `Codebelt.Extensions.BenchmarkDotNet.slnx` is the solution used for local development.
 - `.github/workflows/ci-pipeline.yml` is the CI workflow and the authority for the test matrix.
-- `testenvironments.json` declares the supported `WSL-Ubuntu` and `Docker-Ubuntu` test environments.
+- `testenvironments.json` declares the supported `WSL-Ubuntu`, `Docker-Ubuntu (net10.0)`, and `Docker-Ubuntu (net11.0)` test environments.
 
 ## Build
 
@@ -35,7 +35,7 @@ Run tests one project at a time so a failing or hanging project is attributable.
 ```powershell
 $testProjects = Get-ChildItem test -Filter *.csproj -Recurse
 foreach ($project in $testProjects) {
-    dotnet test $project.FullName --configuration Release --no-restore
+    dotnet test --project $project.FullName --configuration Release --no-restore
 }
 ```
 
@@ -43,8 +43,9 @@ The CI test plan currently runs **4** project(s) and excludes **0** project(s). 
 
 ## Integration and infrastructure
 
-- `WSL-Ubuntu` — WSL distribution `Ubuntu-24.04`.
-- `Docker-Ubuntu` — Docker image `codebeltnet/ubuntu-testrunner:8-9-10-11`.
+- `WSL-Ubuntu` — WSL distribution `Ubuntu-26.04`.
+- `Docker-Ubuntu (net10.0)` — Docker image `codebeltnet/ubuntu-testrunner:10`.
+- `Docker-Ubuntu (net11.0)` — Docker image `codebeltnet/ubuntu-testrunner:11`.
 
 This repository has no repository-local `docker-compose.yml` service dependency in the current checkout.
 Use the environments declared in `testenvironments.json` when you need the estate test runner.

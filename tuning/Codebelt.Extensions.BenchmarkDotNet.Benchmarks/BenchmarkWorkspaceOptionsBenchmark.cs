@@ -34,7 +34,7 @@ public class BenchmarkWorkspaceOptionsBenchmark
             RepositoryTuningFolder = "tuning",
             RepositoryReportsFolder = "reports",
             BenchmarkProjectSuffix = "Benchmarks",
-            TargetFrameworkMoniker = "net9.0",
+            TargetFrameworkMoniker = "net11.0",
             AllowDebugBuild = false
         };
         return options;
@@ -105,7 +105,7 @@ public class BenchmarkWorkspaceOptionsBenchmark
         var options = new BenchmarkWorkspaceOptions
         {
             RepositoryPath = AppContext.BaseDirectory,
-            TargetFrameworkMoniker = "net9.0"
+            TargetFrameworkMoniker = "net11.0"
         };
         options.PostConfigureOptions();
         options.ValidateOptions();

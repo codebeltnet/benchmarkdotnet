@@ -12,6 +12,8 @@ By embracing `Microsoft.Extensions.Hosting`, this package enables clean separati
 
 At its core, the package favors convention over configuration and promotes benchmarks as first-class, host-managed workloads rather than ad-hoc console routines.
 
+Targets `.NET 11` (`net11.0`) and `.NET 10` (`net10.0`).
+
 ## CSharp Example
 
 Benchmarks are executed through a console-hosted Generic Host, allowing full participation in dependency injection, configuration, logging and more.
@@ -32,8 +34,8 @@ public class Program
             o.ConfigureBenchmarkDotNet(c =>
             {
                 var slimJob = BenchmarkWorkspaceOptions.Slim;
-                return c.AddJob(slimJob.WithRuntime(CoreRuntime.Core90))
-                    .AddJob(slimJob.WithRuntime(CoreRuntime.Core10_0));
+                return c.AddJob(slimJob.WithRuntime(CoreRuntime.Core10_0))
+                    .AddJob(slimJob.WithRuntime(CoreRuntime.CreateForNewVersion("net11.0", ".NET 11.0")));
             });
         });
     }
