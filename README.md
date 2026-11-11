@@ -10,6 +10,9 @@ Your versatile BenchmarkDotNet companion for modern development with `.NET 10` a
 
 It is, by heart, free, flexible and built to extend and boost your agile codebelt.
 
+> [!NOTE]
+> To ensure access to current features, improvements, and security updates, and to keep the codebase clean and easy to maintain, we target only the latest long-term (LTS), short-term (STS) and (where applicable) cross-platform .NET versions.
+
 ## Concept
 
 The Extensions for BenchmarkDotNet API by Codebelt is designed to bring clarity, structure, and consistency to BenchmarkDotNet projects.
